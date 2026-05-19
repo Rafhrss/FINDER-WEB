@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Detail Laporan{% endblock %}
+{% block content %}
+    <h1>{{ report.title }}</h1>
+    <p>{{ report.description }}</p>
+    <p><strong>Lokasi:</strong> {{ report.location }}</p>
+    <p><strong>Status:</strong> {{ report.get_status_display }}</p>
+    <p><strong>Pelapor:</strong> {{ report.user.name }} ({{ report.user.email }})</p>
+    <p class="muted">{{ report.created_at }}</p>
+
+    {% if report.image %}
+        <img src="{{ report.image.url }}" alt="{{ report.title }}" style="max-width: 320px;">
+    {% endif %}
+
+    {% if request.user.is_authenticated and request.user.id != report.user_id %}
+        <p>
+            <a href="{% url 'web:open-chat' report.id %}">Hubungi pelapor</a>
+        </p>
+    {% endif %}
+{% endblock %}
