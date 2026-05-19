@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Chat Laporan{% endblock %}
+{% block content %}
+    <h1>Chat: {{ chatroom.report.title }}</h1>
+    <p class="muted">Chat aktif 2 hari (kirim+baca), hari ke-3 s/d ke-7 readonly, setelah itu dihapus.</p>
+
+    <div class="card">
+        <strong>Participant:</strong> {{ chatroom.user1.name }} & {{ chatroom.user2.name }}
+    </div>
+
+    {% for item in chat_messages %}
+        <div class="card">
+            <strong>{{ item.sender.name }}</strong>
+            <p>{{ item.message }}</p>
+            <p class="muted">{{ item.created_at }}</p>
+        </div>
+    {% empty %}
+        <p>Belum ada pesan.</p>
+    {% endfor %}
+
+    {% if can_send %}
+        <form method="post">
+            {% csrf_token %}
+            <textarea name="message" rows="3" cols="60" placeholder="Tulis pesan..."></textarea><br>
+            <button type="submit">Kirim</button>
+        </form>
+    {% else %}
+        <p class="error">Chat sudah readonly karena melewati 2 hari.</p>
+    {% endif %}
+{% endblock %}

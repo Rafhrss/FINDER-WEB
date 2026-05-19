@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+    <h1>Profile</h1>
+    <p><strong>Nama:</strong> {{ profile_user.name }}</p>
+    <p><strong>Email:</strong> {{ profile_user.email }}</p>
+    {% if profile_user.profile_picture %}
+        <img src="{{ profile_user.profile_picture.url }}" alt="Profile picture" style="max-width: 180px;">
+    {% endif %}
+
+    <h2>Laporan Saya</h2>
+    {% for report in reports %}
+        <div class="card">
+            <strong>{{ report.title }}</strong> - {{ report.get_status_display }}
+            <br>
+            <a href="{% url 'web:report-detail' report.id %}">Lihat detail</a>
+        </div>
+    {% empty %}
+        <p>Anda belum membuat laporan.</p>
+    {% endfor %}
+{% endblock %}

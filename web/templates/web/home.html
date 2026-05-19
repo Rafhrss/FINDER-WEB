@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Daftar Laporan{% endblock %}
+{% block content %}
+    <h1>Laporan Barang Hilang / Ditemukan</h1>
+    <form method="get">
+        <input type="text" name="q" placeholder="Cari judul..." value="{{ selected_keyword }}">
+        <input type="text" name="location" placeholder="Filter lokasi..." value="{{ selected_location }}">
+        <select name="status">
+            <option value="">Semua status</option>
+            {% for key, label in statuses %}
+                <option value="{{ key }}" {% if selected_status == key %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <hr>
+
+    {% for report in reports %}
+        <div class="card">
+            <h3>{{ report.title }}</h3>
+            <p>{{ report.description|truncatechars:140 }}</p>
+            <p class="muted">
+                Status: {{ report.get_status_display }} |
+                Lokasi: {{ report.location }} |
+                Oleh: {{ report.user.name }}
+            </p>
+            <a href="{% url 'web:report-detail' report.id %}">Lihat detail</a>
+        </div>
+    {% empty %}
+        <p>Belum ada laporan.</p>
+    {% endfor %}
+{% endblock %}
