@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+    <h1>Register</h1>
+    <p class="muted">Buat akun baru dengan email kampus (<strong>@umkt.ac.id</strong>).</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
+
+        <p>
+            <label for="{{ form.name.id_for_label }}">Nama</label><br>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <br><span class="error">{{ form.name.errors|join:", " }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <label for="{{ form.email.id_for_label }}">Email</label><br>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <br><span class="error">{{ form.email.errors|join:", " }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <label for="{{ form.password1.id_for_label }}">Password</label><br>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <br><span class="error">{{ form.password1.errors|join:", " }}</span>
+            {% endif %}
+        </p>
+
+        <p>
+            <label for="{{ form.password2.id_for_label }}">Konfirmasi Password</label><br>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <br><span class="error">{{ form.password2.errors|join:", " }}</span>
+            {% endif %}
+        </p>
+
+        <button type="submit">Daftar</button>
+    </form>
+    <p class="muted">Sudah punya akun? <a href="{% url 'web:login' %}?next={{ next|urlencode }}">Login di sini</a>.</p>
+{% endblock %}

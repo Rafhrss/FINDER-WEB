@@ -5,32 +5,20 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.v1.users.serializers import LoginSerializer, RegisterSerializer, UserSerializer
-from apps.users.services import login_user, logout_user, register_user
+from api.v1.users.serializers import GoogleLoginSerializer, UserSerializer
+from apps.users.services import login_with_google_id_token, logout_user
 
 
-class RegisterAPIView(APIView):
+class GoogleLoginAPIView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
+        serializer = GoogleLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
-            user = register_user(**serializer.validated_data)
-        except DjangoValidationError as exc:
-            raise ValidationError(exc.messages) from exc
-        user_data = UserSerializer(user).data
-        return Response(user_data, status=status.HTTP_201_CREATED)
-
-
-class LoginAPIView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        try:
-            user, token = login_user(**serializer.validated_data)
+            user, token = login_with_google_id_token(
+                raw_id_token=serializer.validated_data["id_token"]
+            )
         except DjangoValidationError as exc:
             raise ValidationError(exc.messages) from exc
         return Response(

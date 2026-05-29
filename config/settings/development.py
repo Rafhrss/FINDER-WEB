@@ -11,3 +11,5 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

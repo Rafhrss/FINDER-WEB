@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from apps.users.models import User
-from apps.users.validators import validate_campus_email
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,16 +10,10 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
 
-class RegisterSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    name = serializers.CharField(max_length=120)
-    password = serializers.CharField(write_only=True, min_length=8)
-    profile_picture = serializers.ImageField(required=False, allow_null=True)
+class GoogleLoginSerializer(serializers.Serializer):
+    id_token = serializers.CharField(trim_whitespace=True, write_only=True)
 
-    def validate_email(self, value: str) -> str:
-        return validate_campus_email(value)
-
-
-class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
+    def validate_id_token(self, value: str) -> str:
+        if not value:
+            raise serializers.ValidationError("id_token wajib diisi.")
+        return value
