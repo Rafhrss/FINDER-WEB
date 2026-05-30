@@ -38,6 +38,23 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+## Konfigurasi Google OAuth
+
+Tambahkan konfigurasi berikut di `.env`:
+
+```env
+GOOGLE_WORKSPACE_DOMAIN=umkt.ac.id
+GOOGLE_OAUTH_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+GOOGLE_OAUTH_CLIENT_SECRET=your-google-client-secret
+GOOGLE_OAUTH_ALLOWED_CLIENT_IDS=your-google-client-id.apps.googleusercontent.com
+```
+
+Kemudian:
+1. Buat OAuth client di Google Cloud Console.
+2. Tambahkan redirect URI web: `http://localhost:8000/accounts/google/login/callback/`.
+3. Pastikan aplikasi web login lewat `/login/` (tombol **Login dengan Google**).
+4. Untuk mobile, kirim `id_token` ke endpoint `POST /api/v1/users/google/login/`.
+
 ## Seed Data Dummy
 
 ```bash
@@ -54,10 +71,9 @@ Semua endpoint API tersedia di `/api/v1/`. Berikut adalah daftar lengkap endpoin
 
 | Method | Endpoint | Deskripsi | Auth | Status Code |
 |--------|----------|-----------|------|-------------|
-| POST | `register/` | Register user baru dengan email @umkt.ac.id | ❌ | 201 |
-| POST | `login/` | Login dan dapatkan token | ❌ | 200 |
+| POST | `google/login/` | Login mobile via Google `id_token`, return app token | ❌ | 200 |
 | POST | `logout/` | Logout (invalidate token) | ✅ | 204 |
-| GET | `me/` | Get informasi user yang sedang login | ✅ | 200 |
+| GET | `me/` | Alias detail user aktif | ✅ | 200 |
 
 ### Reports CRUD (`/api/v1/reports/`)
 
@@ -102,14 +118,16 @@ GET /api/v1/reports/?q=laptop&status=LOST
 
 ### Success Response
 
-**Register / Login:**
+**Google Login (mobile token exchange):**
 ```json
 {
-  "id": 1,
-  "email": "user@umkt.ac.id",
-  "name": "John Doe",
-  "profile_picture": null,
-  "token": "a1b2c3d4e5f6g7h8..."
+  "token": "a1b2c3d4e5f6g7h8...",
+  "user": {
+    "id": 1,
+    "email": "user@umkt.ac.id",
+    "name": "John Doe",
+    "profile_picture": null
+  }
 }
 ```
 
@@ -184,41 +202,29 @@ GET /api/v1/reports/?q=laptop&status=LOST
 
 ### Email Validation
 - Hanya email domain `@umkt.ac.id` yang diterima
-- Validasi dilakukan di register, login, dan create account
+- Validasi dilakukan dari claim Google OAuth (`email_verified`, `hd`, dan suffix email)
 - Format: `nama@umkt.ac.id`
 
 ---
 
 ## Testing dengan cURL
 
-### 1. Register User
+### 1. Google Login (Mobile)
 ```bash
-curl -X POST http://localhost:8000/api/v1/users/register/ \
+curl -X POST http://localhost:8000/api/v1/users/google/login/ \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "john@umkt.ac.id",
-    "password": "securepass123"
+    "id_token": "GOOGLE_ID_TOKEN_DARI_MOBILE_SDK"
   }'
 ```
 
-### 2. Login
-```bash
-curl -X POST http://localhost:8000/api/v1/users/login/ \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "john@umkt.ac.id",
-    "password": "securepass123"
-  }'
-# Response: {"id": 1, "email": "...", "token": "abc123..."}
-```
-
-### 3. Get Current User (dengan token)
+### 2. Get Current User (dengan token)
 ```bash
 curl -X GET http://localhost:8000/api/v1/users/me/ \
   -H "Authorization: Token abc123..."
 ```
 
-### 4. List Reports
+### 3. List Reports
 ```bash
 # Semua reports
 curl -X GET http://localhost:8000/api/v1/reports/ \
@@ -237,7 +243,7 @@ curl -X GET "http://localhost:8000/api/v1/reports/?status=LOST&location=Kantin&q
   -H "Authorization: Token abc123..."
 ```
 
-### 5. Create Report
+### 4. Create Report
 ```bash
 curl -X POST http://localhost:8000/api/v1/reports/ \
   -H "Authorization: Token abc123..." \
@@ -250,13 +256,13 @@ curl -X POST http://localhost:8000/api/v1/reports/ \
   }'
 ```
 
-### 6. Get Report Detail
+### 5. Get Report Detail
 ```bash
 curl -X GET http://localhost:8000/api/v1/reports/1/ \
   -H "Authorization: Token abc123..."
 ```
 
-### 7. Update Report
+### 6. Update Report
 ```bash
 # Full update (PUT)
 curl -X PUT http://localhost:8000/api/v1/reports/1/ \
@@ -276,13 +282,13 @@ curl -X PATCH http://localhost:8000/api/v1/reports/1/ \
   -d '{"status": "CLAIMED"}'
 ```
 
-### 8. Delete Report
+### 7. Delete Report
 ```bash
 curl -X DELETE http://localhost:8000/api/v1/reports/1/ \
   -H "Authorization: Token abc123..."
 ```
 
-### 9. Create Chat Room
+### 8. Create Chat Room
 ```bash
 curl -X POST http://localhost:8000/api/v1/chats/reports/1/rooms/ \
   -H "Authorization: Token abc123..." \
@@ -290,13 +296,13 @@ curl -X POST http://localhost:8000/api/v1/chats/reports/1/rooms/ \
 # Return: 201 jika baru, 200 jika sudah ada
 ```
 
-### 10. Get Chat Messages (Polling)
+### 9. Get Chat Messages (Polling)
 ```bash
 curl -X GET http://localhost:8000/api/v1/chats/rooms/1/messages/ \
   -H "Authorization: Token abc123..."
 ```
 
-### 11. Send Message
+### 10. Send Message
 ```bash
 curl -X POST http://localhost:8000/api/v1/chats/rooms/1/messages/ \
   -H "Authorization: Token abc123..." \
@@ -304,7 +310,7 @@ curl -X POST http://localhost:8000/api/v1/chats/rooms/1/messages/ \
   -d '{"message": "Apakah laptop sudah ketemu?"}'
 ```
 
-### 12. Logout
+### 11. Logout
 ```bash
 curl -X POST http://localhost:8000/api/v1/users/logout/ \
   -H "Authorization: Token abc123..."
@@ -317,8 +323,8 @@ curl -X POST http://localhost:8000/api/v1/users/logout/ \
 
 | Code | Arti | Contoh |
 |------|------|--------|
-| 200 | OK | Login berhasil, get data berhasil |
-| 201 | Created | Register, create report, send message |
+| 200 | OK | Google login berhasil, get data berhasil |
+| 201 | Created | Create report, send message |
 | 204 | No Content | Logout, delete berhasil |
 | 400 | Bad Request | Validasi gagal (email format salah) |
 | 401 | Unauthorized | Token tidak valid/expired |

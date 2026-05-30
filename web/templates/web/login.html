@@ -2,28 +2,13 @@
 {% block title %}Login{% endblock %}
 {% block content %}
     <h1>Login</h1>
-    <p class="muted">Gunakan email kampus (<strong>@umkt.ac.id</strong>).</p>
-
-    <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}">
-
-        <p>
-            <label for="{{ form.email.id_for_label }}">Email</label><br>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <br><span class="error">{{ form.email.errors|join:", " }}</span>
-            {% endif %}
-        </p>
-
-        <p>
-            <label for="{{ form.password.id_for_label }}">Password</label><br>
-            {{ form.password }}
-            {% if form.password.errors %}
-                <br><span class="error">{{ form.password.errors|join:", " }}</span>
-            {% endif %}
-        </p>
-
-        <button type="submit">Login</button>
-    </form>
+    <p class="muted">
+        Login hanya melalui Google Workspace dengan domain
+        <strong>@umkt.ac.id</strong>.
+    </p>
+    <p>
+        <a href="{{ google_login_url }}">
+            Login dengan Google
+        </a>
+    </p>
 {% endblock %}

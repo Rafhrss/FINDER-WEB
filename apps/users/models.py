@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -6,6 +8,7 @@ from apps.users.validators import validate_campus_email
 
 
 class User(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = None
     email = models.EmailField(unique=True, validators=[validate_campus_email])
     name = models.CharField(max_length=120)
