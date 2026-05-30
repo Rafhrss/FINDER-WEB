@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "tailwind",
+    "theme",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -46,6 +48,11 @@ INSTALLED_APPS = [
     "apps.core",
 ]
 
+TAILWIND_APP_NAME = "theme"
+
+if DEBUG:
+    INSTALLED_APPS += ["django_browser_reload"]
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -56,6 +63,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE += ["django_browser_reload.middleware.BrowserReloadMiddleware"]
 
 ROOT_URLCONF = "config.urls"
 
@@ -79,17 +89,11 @@ ASGI_APPLICATION = "config.asgi.application"
 
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL", "sqlite:///db.sqlite3"),
+        default=os.getenv("DATABASE_URL"),
         conn_max_age=600,
         conn_health_checks=True,
     )
 }
-
-if DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3":
-    DATABASES["default"] = {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.getenv("DB_NAME", str(BASE_DIR / "db.sqlite3")),
-    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -121,7 +125,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 SITE_ID = int(os.getenv("SITE_ID", "1"))
-GOOGLE_WORKSPACE_DOMAIN = os.getenv("GOOGLE_WORKSPACE_DOMAIN", "umkt.ac.id").strip().lower()
+GOOGLE_WORKSPACE_DOMAIN = (
+    os.getenv("GOOGLE_WORKSPACE_DOMAIN", "umkt.ac.id").strip().lower()
+)
 GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID", "").strip()
 GOOGLE_OAUTH_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", "").strip()
 GOOGLE_OAUTH_ALLOWED_CLIENT_IDS = env_list(
@@ -175,3 +181,4 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
 }
+

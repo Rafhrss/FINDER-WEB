@@ -1,1 +1,5 @@
 -r base.txt
+django-tailwind[reload]>=3.0,<4.0
+cookiecutter>=2.6,<3.0
+honcho>=1.1,<2.0
+setuptools>=68,<80

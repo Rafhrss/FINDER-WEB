@@ -1,9 +1,11 @@
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Finder Kampus{% endblock %}</title>
+    {% tailwind_css %}
     <style>
         body { font-family: Arial, sans-serif; margin: 24px; }
         nav a { margin-right: 12px; }
