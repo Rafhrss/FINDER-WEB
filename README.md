@@ -38,6 +38,39 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+## Tailwind CSS
+
+Install Tailwind dependencies:
+
+```bash
+python manage.py tailwind install
+```
+
+### Development: Run Django + Tailwind together
+
+Use Honcho to run both Django server and Tailwind watcher in parallel:
+
+```bash
+python -m honcho start
+```
+
+This will start:
+- **web**: Django development server at `http://localhost:8000`
+- **tailwind**: Tailwind CSS watcher for automatic CSS compilation
+
+Alternatively, run them separately:
+
+```bash
+python manage.py tailwind start     # Terminal 1
+python manage.py runserver           # Terminal 2
+```
+
+### Production build:
+
+```bash
+python manage.py tailwind build
+```
+
 ## Konfigurasi Google OAuth
 
 Tambahkan konfigurasi berikut di `.env`:
