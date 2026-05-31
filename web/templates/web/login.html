@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Login{% endblock %}
 {% block content %}
-    <h1>Login</h1>
-    <p class="muted">
-        Login hanya melalui Google Workspace dengan domain
-        <strong>@umkt.ac.id</strong>.
-    </p>
-    <p>
-        <a href="{{ google_login_url }}">
-            Login dengan Google
-        </a>
-    </p>
+    <section class="mx-auto w-full max-w-xl">
+        <div class="card border border-base-300 bg-base-200/70 shadow-sm">
+            <div class="card-body gap-4">
+                <h1 class="card-title text-2xl">Login</h1>
+                <p class="text-sm text-base-content/70">
+                    Login hanya melalui Google Workspace dengan domain <strong>@umkt.ac.id</strong>.
+                </p>
+                <a href="{{ google_login_url }}" class="btn btn-primary w-full">Login dengan Google</a>
+            </div>
+        </div>
+    </section>
 {% endblock %}

@@ -11,7 +11,6 @@ dj-rest-auth==6.0.0
 Django==5.2.14
 django-allauth==0.63.6
 django-browser-reload==1.21.0
-django-tailwind==3.9.1
 djangorestframework==3.17.1
 google-auth==2.53.0
 idna==3.15

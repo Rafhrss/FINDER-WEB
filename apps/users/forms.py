@@ -8,6 +8,12 @@ class LoginForm(forms.Form):
     email = forms.EmailField(label="Email kampus")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            existing = field.widget.attrs.get("class", "")
+            field.widget.attrs["class"] = f"{existing} input input-bordered w-full bg-base-100".strip()
+
     def clean_email(self):
         return validate_campus_email(self.cleaned_data["email"])
 
@@ -25,6 +31,12 @@ class RegisterForm(forms.Form):
         widget=forms.PasswordInput,
         min_length=8,
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            existing = field.widget.attrs.get("class", "")
+            field.widget.attrs["class"] = f"{existing} input input-bordered w-full bg-base-100".strip()
 
     def clean_name(self):
         return self.cleaned_data["name"].strip()

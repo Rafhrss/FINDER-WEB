@@ -1,33 +1,39 @@
 {% extends "base.html" %}
 {% block title %}Daftar Laporan{% endblock %}
 {% block content %}
-    <h1>Laporan Barang Hilang / Ditemukan</h1>
-    <form method="get">
-        <input type="text" name="q" placeholder="Cari judul..." value="{{ selected_keyword }}">
-        <input type="text" name="location" placeholder="Filter lokasi..." value="{{ selected_location }}">
-        <select name="status">
-            <option value="">Semua status</option>
-            {% for key, label in statuses %}
-                <option value="{{ key }}" {% if selected_status == key %}selected{% endif %}>{{ label }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Filter</button>
-    </form>
-
-    <hr>
-
-    {% for report in reports %}
-        <div class="card">
-            <h3>{{ report.title }}</h3>
-            <p>{{ report.description|truncatechars:140 }}</p>
-            <p class="muted">
-                Status: {{ report.get_status_display }} |
-                Lokasi: {{ report.location }} |
-                Oleh: {{ report.user.name }}
+    <section class="mb-8 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <div class="rounded-3xl border border-base-300 bg-base-200/70 p-6 shadow-sm">
+            <p class="text-xs uppercase tracking-[0.3em] text-primary">Finder Kampus</p>
+            <h1 class="mt-3 text-3xl font-semibold sm:text-4xl">Laporan barang hilang & ditemukan</h1>
+            <p class="mt-2 text-sm text-base-content/70">
+                Temukan barang kamu atau bantu orang lain dengan laporan yang rapi, jelas, dan mudah dicari.
             </p>
-            <a href="{% url 'web:report-detail' report.id %}">Lihat detail</a>
         </div>
-    {% empty %}
-        <p>Belum ada laporan.</p>
-    {% endfor %}
+        <div class="card border border-base-300 bg-base-200/70 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-base">Filter laporan</h2>
+                <form method="get" class="grid gap-4">
+                    <input class="input input-bordered w-full" type="text" name="q" placeholder="Cari judul..." value="{{ selected_keyword }}">
+                    <input class="input input-bordered w-full" type="text" name="location" placeholder="Filter lokasi..." value="{{ selected_location }}">
+                    <select class="select select-bordered w-full" name="status">
+                        <option value="">Semua status</option>
+                        {% for key, label in statuses %}
+                            <option value="{{ key }}" {% if selected_status == key %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-block">Terapkan filter</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid gap-4 md:grid-cols-2">
+        {% for report in reports %}
+            {% include "partials/_report_card.html" with report=report %}
+        {% empty %}
+            <div class="col-span-full rounded-2xl border border-dashed border-base-300 bg-base-200/60 p-8 text-center">
+                <p class="text-base-content/70">Belum ada laporan. Coba ubah filter atau buat laporan baru.</p>
+            </div>
+        {% endfor %}
+    </section>
 {% endblock %}
