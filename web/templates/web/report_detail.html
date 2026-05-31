@@ -1,20 +1,48 @@
 {% extends "base.html" %}
 {% block title %}Detail Laporan{% endblock %}
 {% block content %}
-    <h1>{{ report.title }}</h1>
-    <p>{{ report.description }}</p>
-    <p><strong>Lokasi:</strong> {{ report.location }}</p>
-    <p><strong>Status:</strong> {{ report.get_status_display }}</p>
-    <p><strong>Pelapor:</strong> {{ report.user.name }} ({{ report.user.email }})</p>
-    <p class="muted">{{ report.created_at }}</p>
+    <section class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <div class="card border border-base-300 bg-base-200/70 shadow-sm">
+            <div class="card-body gap-4">
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                    <h1 class="text-2xl font-semibold">{{ report.title }}</h1>
+                    <span class="badge badge-outline">{{ report.get_status_display }}</span>
+                </div>
+                <p class="text-sm text-base-content/80">{{ report.description }}</p>
+                <div class="divider my-0">Detail</div>
+                <dl class="grid gap-2 text-sm text-base-content/70">
+                    <div class="flex items-center justify-between">
+                        <dt>Lokasi</dt>
+                        <dd class="font-medium text-base-content">{{ report.location }}</dd>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <dt>Pelapor</dt>
+                        <dd class="font-medium text-base-content">{{ report.user.name }}</dd>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <dt>Email</dt>
+                        <dd class="font-medium text-base-content">{{ report.user.email }}</dd>
+                    </div>
+                </dl>
+                <p class="text-xs text-base-content/50">{{ report.created_at }}</p>
+            </div>
+        </div>
 
-    {% if report.image %}
-        <img src="{{ report.image.url }}" alt="{{ report.title }}" style="max-width: 320px;">
-    {% endif %}
+        <div class="space-y-4">
+            {% if report.image %}
+                <div class="card border border-base-300 bg-base-200/70 shadow-sm">
+                    <figure class="px-6 pt-6">
+                        <img src="{{ report.image.url }}" alt="{{ report.title }}" class="rounded-xl object-cover">
+                    </figure>
+                    <div class="card-body">
+                        <p class="text-sm text-base-content/70">Foto barang terkait laporan.</p>
+                    </div>
+                </div>
+            {% endif %}
 
-    {% if request.user.is_authenticated and request.user.id != report.user_id %}
-        <p>
-            <a href="{% url 'web:open-chat' report.id %}">Hubungi pelapor</a>
-        </p>
-    {% endif %}
+            {% if request.user.is_authenticated and request.user.id != report.user_id %}
+                <a href="{% url 'web:open-chat' report.id %}" class="btn btn-primary btn-block">Hubungi pelapor</a>
+            {% endif %}
+        </div>
+    </section>
 {% endblock %}

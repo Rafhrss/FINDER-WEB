@@ -1,30 +1,50 @@
 {% extends "base.html" %}
 {% block title %}Chat Laporan{% endblock %}
 {% block content %}
-    <h1>Chat: {{ chatroom.report.title }}</h1>
-    <p class="muted">Chat aktif 2 hari (kirim+baca), hari ke-3 s/d ke-7 readonly, setelah itu dihapus.</p>
+    <section class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <div class="space-y-4">
+            <div class="card border border-base-300 bg-base-200/70 shadow-sm">
+                <div class="card-body gap-2">
+                    <h1 class="card-title text-2xl">Chat: {{ chatroom.report.title }}</h1>
+                    <p class="text-sm text-base-content/70">
+                        Chat aktif 2 hari (kirim+baca), hari ke-3 s/d ke-7 readonly, setelah itu dihapus.
+                    </p>
+                    <p class="text-xs text-base-content/50">
+                        Participant: {{ chatroom.user1.name }} & {{ chatroom.user2.name }}
+                    </p>
+                </div>
+            </div>
 
-    <div class="card">
-        <strong>Participant:</strong> {{ chatroom.user1.name }} & {{ chatroom.user2.name }}
-    </div>
-
-    {% for item in chat_messages %}
-        <div class="card">
-            <strong>{{ item.sender.name }}</strong>
-            <p>{{ item.message }}</p>
-            <p class="muted">{{ item.created_at }}</p>
+            <div class="space-y-4 rounded-2xl border border-base-300 bg-base-200/50 p-4">
+                {% for item in chat_messages %}
+                    <div class="chat {% if item.sender_id == request.user.id %}chat-end{% else %}chat-start{% endif %}">
+                        <div class="chat-header text-xs opacity-60">
+                            {{ item.sender.name }}
+                            <time class="ml-1">{{ item.created_at }}</time>
+                        </div>
+                        <div class="chat-bubble">{{ item.message }}</div>
+                    </div>
+                {% empty %}
+                    <p class="text-sm text-base-content/70">Belum ada pesan.</p>
+                {% endfor %}
+            </div>
         </div>
-    {% empty %}
-        <p>Belum ada pesan.</p>
-    {% endfor %}
 
-    {% if can_send %}
-        <form method="post">
-            {% csrf_token %}
-            <textarea name="message" rows="3" cols="60" placeholder="Tulis pesan..."></textarea><br>
-            <button type="submit">Kirim</button>
-        </form>
-    {% else %}
-        <p class="error">Chat sudah readonly karena melewati 2 hari.</p>
-    {% endif %}
+        <div class="card border border-base-300 bg-base-200/70 shadow-sm">
+            <div class="card-body gap-4">
+                <h2 class="card-title text-base">Kirim pesan</h2>
+                {% if can_send %}
+                    <form method="post" class="grid gap-3">
+                        {% csrf_token %}
+                        <textarea name="message" rows="4" placeholder="Tulis pesan..." class="textarea textarea-bordered w-full"></textarea>
+                        <button type="submit" class="btn btn-primary">Kirim</button>
+                    </form>
+                {% else %}
+                    <div role="alert" class="alert alert-warning">
+                        <span>Chat sudah readonly karena melewati 2 hari.</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
 {% endblock %}

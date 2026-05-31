@@ -1,0 +1,40 @@
+<nav class="navbar bg-base-200/70 border-b border-base-300 backdrop-blur">
+    <div class="navbar-start">
+        <a class="btn btn-ghost text-lg tracking-wide" href="{% url 'web:home' %}">
+            <span class="text-primary">Finder</span>
+            <span class="opacity-70">Kampus</span>
+        </a>
+    </div>
+    <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1 text-sm">
+            <li><a href="{% url 'web:home' %}">Beranda</a></li>
+            {% if request.user.is_authenticated %}
+                <li><a href="{% url 'web:profile' %}">Profil</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="navbar-end gap-2">
+        <div class="dropdown dropdown-end lg:hidden">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </div>
+            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 w-52 rounded-box bg-base-200 p-2 shadow">
+                <li><a href="{% url 'web:home' %}">Beranda</a></li>
+                {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'web:profile' %}">Profil</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        {% if request.user.is_authenticated %}
+            <form action="{% url 'web:logout' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{% url 'web:home' %}">
+                <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'web:login' %}?next={{ request.path|urlencode }}" class="btn btn-primary btn-sm">Login</a>
+        {% endif %}
+    </div>
+</nav>
