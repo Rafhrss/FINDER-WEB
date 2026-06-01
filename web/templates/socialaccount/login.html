@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% if process == "connect" %}
+        {% trans "Connect" %} {{ provider.name }}
+    {% else %}
+        {% trans "Sign In Via" %} {{ provider.name }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="mx-auto w-full max-w-xl">
+    <div class="card border border-base-300 bg-base-200/70 shadow-sm">
+        <div class="card-body gap-4 text-center">
+            {% if process == "connect" %}
+                <h1 class="card-title text-2xl justify-center">
+                    {% blocktrans with provider.name as provider %}Hubungkan {{ provider }}{% endblocktrans %}
+                </h1>
+                <p class="text-sm text-base-content/70">
+                    {% blocktrans with provider.name as provider %}Anda akan menghubungkan akun pihak ketiga baru dari {{ provider }}.{% endblocktrans %}
+                </p>
+            {% else %}
+                <h1 class="card-title text-2xl justify-center">
+                    {% blocktrans with provider.name as provider %}Masuk via {{ provider }}{% endblocktrans %}
+                </h1>
+                <p class="text-sm text-base-content/70">
+                    {% blocktrans with provider.name as provider %}Anda akan masuk menggunakan akun pihak ketiga dari {{ provider }}.{% endblocktrans %}
+                </p>
+            {% endif %}
+
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary w-full">
+                    {% trans "Continue" %}
+                </button>
+            </form>
+            
+            <div class="card-actions justify-center mt-2">
+                <a href="{% url 'web:login' %}" class="btn btn-ghost btn-sm w-full">Batal</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
