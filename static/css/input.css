@@ -42,3 +42,15 @@
   --depth: 1;
   --noise: 0;
 }
+
+@theme {
+  --color-umkt-navy: #0e182a;
+  --color-umkt-black: #090d14;
+  --color-umkt-green: #1df29f;
+  --color-umkt-btn-bg: #121b2d;
+  --color-umkt-btn-border: #222f45;
+}
+
+@theme {
+  --background-image-umkt-glow: radial-gradient(circle at top left, rgba(29, 242, 159, 0.1), transparent 50%), radial-gradient(circle at bottom right, rgba(5, 10, 16, 0.8), transparent 50%);
+}
