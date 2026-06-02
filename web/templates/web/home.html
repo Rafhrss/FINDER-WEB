@@ -1,38 +1,126 @@
 {% extends "base.html" %}
 {% block title %}Daftar Laporan{% endblock %}
 {% block content %}
-    <section class="mb-8 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <div class="rounded-3xl border border-base-300 bg-base-200/70 p-6 shadow-sm">
-            <p class="text-xs uppercase tracking-[0.3em] text-primary">Finder Kampus</p>
-            <h1 class="mt-3 text-3xl font-semibold sm:text-4xl">Laporan barang hilang & ditemukan</h1>
-            <p class="mt-2 text-sm text-base-content/70">
-                Temukan barang kamu atau bantu orang lain dengan laporan yang rapi, jelas, dan mudah dicari.
-            </p>
-        </div>
-        <div class="card border border-base-300 bg-base-200/70 shadow-sm">
-            <div class="card-body">
-                <h2 class="card-title text-base">Filter laporan</h2>
-                <form method="get" class="grid gap-4">
-                    <input class="input input-bordered w-full" type="text" name="q" placeholder="Cari judul..." value="{{ selected_keyword }}">
-                    <input class="input input-bordered w-full" type="text" name="location" placeholder="Filter lokasi..." value="{{ selected_location }}">
-                    <select class="select select-bordered w-full" name="status">
-                        <option value="">Semua status</option>
-                        {% for key, label in statuses %}
-                            <option value="{{ key }}" {% if selected_status == key %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="submit" class="btn btn-primary btn-block">Terapkan filter</button>
-                </form>
+
+    <!-- Carousel Section -->
+    <section class="mb-12 relative">
+        <!-- Wrapper Carousel (Scrolling Container) -->
+        <div class="carousel w-full rounded-3xl shadow-sm bg-base-200 overflow-hidden">
+            {% with carousel_reports=reports|slice:":3" %}
+            {% for report in carousel_reports %}
+            <div id="slide{{ forloop.counter }}" class="carousel-item relative w-full">
+                
+                <!-- Main Content Container (items-end to align bottom) -->
+                <div class="w-full relative min-h-[300px] flex items-end p-8 md:px-20 pt-12 pb-14">
+                    
+                    <!-- Backgrounds -->
+                    {% if report.image %}
+                        <img src="{{ report.image.url }}" alt="{{ report.title }}" class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay">
+                    {% endif %}
+                    <div class="absolute inset-0 bg-linear-to-br from-base-300/90 to-base-200/80 pointer-events-none"></div>
+                    <div class="absolute right-0 top-0 bottom-0 w-1/2 bg-linear-to-l from-primary/10 to-transparent pointer-events-none"></div>
+
+                    <!-- Date Pill -->
+                    <div class="absolute top-6 left-6 md:top-8 md:left-8 bg-base-300/90 backdrop-blur text-primary px-4 py-1.5 rounded-full text-xs font-semibold z-20 shadow-sm border border-base-content/5">
+                        {{ report.created_at|date:"d F Y" }}
+                    </div>
+
+                    <!-- Content Layout -->
+                    <div class="relative z-10 w-full flex flex-col md:flex-row items-end md:items-end justify-between gap-6 md:gap-8 mt-12 md:mt-0">
+                        
+                        <!-- Left Group: Avatar + Text -->
+                        <div class="flex flex-col md:flex-row items-center md:items-end gap-6 flex-1 min-w-0 w-full">
+                            <!-- Avatar -->
+                            <div class="shrink-0 hidden md:block">
+                                <div class="w-24 h-24 lg:w-28 lg:h-28 rounded-full bg-base-100 text-base-content flex items-center justify-center shadow-lg overflow-hidden ring-4 ring-primary/20">
+                                    {% with social=report.user.socialaccount_set.first %}
+                                        {% if social and social.extra_data.picture %}
+                                            <img src="{{ social.extra_data.picture }}" alt="{{ report.user.name }}" class="w-full h-full object-cover">
+                                        {% elif report.user.profile_picture %}
+                                            <img src="{{ report.user.profile_picture.url }}" alt="{{ report.user.name }}" class="w-full h-full object-cover">
+                                        {% else %}
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-12 h-12 lg:w-16 lg:h-16 text-primary mt-2">
+                                                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
+                                            </svg>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            </div>
+                            
+                            <!-- Text Info -->
+                            <div class="flex-1 min-w-0 text-center md:text-left space-y-2 mb-1">
+                                <div class="uppercase text-[11px] font-bold tracking-[0.2em] {% if report.status == 'LOST' %}text-error{% elif report.status == 'FOUND' %}text-warning{% elif report.status == 'CLAIMED' %}text-success{% endif %}">
+                                    {{ report.get_status_display }}
+                                </div>
+                                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold truncate">
+                                    {{ report.title }}
+                                </h2>
+                                <div class="flex items-center justify-center md:justify-start gap-2 text-base-content/70 text-sm mt-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    <span class="truncate">{{ report.location }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Group: Button -->
+                        <div class="shrink-0 z-20 mt-4 md:mt-0 mb-1">
+                            <a href="{% url 'web:report-detail' report.id %}" class="btn btn-primary rounded-full px-8 shadow-md">Lihat Detail</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Arrows -->
+                {% if carousel_reports|length > 1 %}
+                <div class="absolute left-4 right-4 top-1/2 flex -translate-y-1/2 transform justify-between z-30 pointer-events-none">
+                    {% if forloop.counter == 1 %}
+                        <a href="#slide{{ carousel_reports|length }}" class="btn btn-circle btn-sm md:btn-md pointer-events-auto shadow-md">❮</a>
+                        <a href="#slide2" class="btn btn-circle btn-sm md:btn-md pointer-events-auto shadow-md">❯</a>
+                    {% elif forloop.counter == carousel_reports|length %}
+                        <a href="#slide{{ forloop.counter|add:'-1' }}" class="btn btn-circle btn-sm md:btn-md pointer-events-auto shadow-md">❮</a>
+                        <a href="#slide1" class="btn btn-circle btn-sm md:btn-md pointer-events-auto shadow-md">❯</a>
+                    {% else %}
+                        <a href="#slide{{ forloop.counter|add:'-1' }}" class="btn btn-circle btn-sm md:btn-md pointer-events-auto shadow-md">❮</a>
+                        <a href="#slide{{ forloop.counter|add:'1' }}" class="btn btn-circle btn-sm md:btn-md pointer-events-auto shadow-md">❯</a>
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
+            {% empty %}
+            <div class="w-full min-h-[300px] flex items-center justify-center p-12 text-base-content/50">
+                Belum ada laporan untuk ditampilkan.
+            </div>
+            {% endfor %}
+            {% endwith %}
         </div>
+        
+        <!-- Carousel Navigation Dots (Fixed Outside of Scrolling Area) -->
+        {% with carousel_reports=reports|slice:":3" %}
+        {% if carousel_reports|length > 1 %}
+        <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20 pointer-events-none">
+            {% for report in carousel_reports %}
+            <a href="#slide{{ forloop.counter }}" class="w-2 h-2 rounded-full bg-base-content/30 hover:bg-primary focus:bg-primary transition-colors pointer-events-auto"></a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
     </section>
 
-    <section class="grid gap-4 md:grid-cols-2">
+    <!-- Header Laporan Terbaru -->
+    <div class="flex justify-between items-end mb-6">
+        <h2 class="text-2xl font-bold">Laporan Terbaru</h2>
+        <a href="#" class="text-primary hover:underline text-sm font-medium flex items-center gap-1">
+            Lihat Semua Laporan
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+        </a>
+    </div>
+
+    <!-- Grid Laporan -->
+    <section class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {% for report in reports %}
             {% include "partials/_report_card.html" with report=report %}
         {% empty %}
             <div class="col-span-full rounded-2xl border border-dashed border-base-300 bg-base-200/60 p-8 text-center">
-                <p class="text-base-content/70">Belum ada laporan. Coba ubah filter atau buat laporan baru.</p>
+                <p class="text-base-content/70">Belum ada laporan. Buat laporan pertamamu!</p>
             </div>
         {% endfor %}
     </section>

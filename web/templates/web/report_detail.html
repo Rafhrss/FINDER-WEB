@@ -1,48 +1,108 @@
 {% extends "base.html" %}
 {% block title %}Detail Laporan{% endblock %}
 {% block content %}
-    <section class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <div class="card border border-base-300 bg-base-200/70 shadow-sm">
-            <div class="card-body gap-4">
-                <div class="flex flex-wrap items-start justify-between gap-3">
-                    <h1 class="text-2xl font-semibold">{{ report.title }}</h1>
-                    <span class="badge badge-outline">{{ report.get_status_display }}</span>
+    <!-- Back Link -->
+    <div class="mb-8">
+        <a href="{% url 'web:home' %}" class="inline-flex items-center gap-2 text-base-content/70 hover:text-primary transition-colors font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+            </svg>
+            Kembali ke Pencarian
+        </a>
+    </div>
+
+    <!-- Main Layout -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        
+        <!-- Left Column: Image & User Info -->
+        <div class="flex flex-col gap-6">
+            <!-- Image Block -->
+            <div class="w-full aspect-square md:aspect-4/3 lg:aspect-square rounded-3xl bg-base-200/50 border border-base-300 flex items-center justify-center overflow-hidden relative shadow-sm">
+                {% if report.image %}
+                    <img src="{{ report.image.url }}" alt="{{ report.title }}" class="w-full h-full object-cover">
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-24 h-24 text-base-content/20">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                    </svg>
+                {% endif %}
+            </div>
+
+            <!-- Reporter Info -->
+            <div class="flex flex-col gap-3">
+                <h3 class="text-xs font-bold tracking-widest text-base-content/80 uppercase">Informasi Pelapor</h3>
+                <div class="card bg-base-200/60 border border-base-300 shadow-sm rounded-2xl">
+                    <div class="card-body p-4 flex-row items-center gap-4">
+                        <div class="w-12 h-12 rounded-full overflow-hidden bg-base-300 flex items-center justify-center border border-base-300/50 shadow-inner shrink-0">
+                            {% with social=report.user.socialaccount_set.first %}
+                                {% if social and social.extra_data.picture %}
+                                    <img src="{{ social.extra_data.picture }}" alt="{{ report.user.name }}" class="w-full h-full object-cover">
+                                {% elif report.user.profile_picture %}
+                                    <img src="{{ report.user.profile_picture.url }}" alt="{{ report.user.name }}" class="w-full h-full object-cover">
+                                {% else %}
+                                    <span class="text-base-content/70 font-semibold text-lg">{{ report.user.name|slice:":2"|upper }}</span>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base-content">{{ report.user.name }}</h4>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-sm text-base-content/80">{{ report.description }}</p>
-                <div class="divider my-0">Detail</div>
-                <dl class="grid gap-2 text-sm text-base-content/70">
-                    <div class="flex items-center justify-between">
-                        <dt>Lokasi</dt>
-                        <dd class="font-medium text-base-content">{{ report.location }}</dd>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <dt>Pelapor</dt>
-                        <dd class="font-medium text-base-content">{{ report.user.name }}</dd>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <dt>Email</dt>
-                        <dd class="font-medium text-base-content">{{ report.user.email }}</dd>
-                    </div>
-                </dl>
-                <p class="text-xs text-base-content/50">{{ report.created_at }}</p>
             </div>
         </div>
 
-        <div class="space-y-4">
-            {% if report.image %}
-                <div class="card border border-base-300 bg-base-200/70 shadow-sm">
-                    <figure class="px-6 pt-6">
-                        <img src="{{ report.image.url }}" alt="{{ report.title }}" class="rounded-xl object-cover">
-                    </figure>
-                    <div class="card-body">
-                        <p class="text-sm text-base-content/70">Foto barang terkait laporan.</p>
+        <!-- Right Column: Metadata, Title, Location, Description -->
+        <div class="flex flex-col">
+            
+            <!-- Metadata Row -->
+            <div class="flex flex-wrap items-center gap-4 mb-4">
+                {% if report.status == 'LOST' %}
+                    <span class="badge badge-outline border-error text-error uppercase font-semibold text-xs tracking-wide px-3 py-3 rounded-md">Barang Hilang</span>
+                {% elif report.status == 'FOUND' %}
+                    <span class="badge badge-outline border-warning text-warning uppercase font-semibold text-xs tracking-wide px-3 py-3 rounded-md">Menemukan</span>
+                {% elif report.status == 'CLAIMED' %}
+                    <span class="badge badge-outline border-success text-success uppercase font-semibold text-xs tracking-wide px-3 py-3 rounded-md">Selesai</span>
+                {% endif %}
+                <span class="text-sm text-base-content/60 font-medium">Diunggah {{ report.created_at|date:"d F Y" }}</span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-4xl lg:text-5xl font-bold text-base-content leading-tight mb-10">{{ report.title }}</h1>
+
+            <div class="flex flex-col gap-8 grow">
+                <!-- Location Block -->
+                <div class="flex flex-col gap-3">
+                    <h3 class="text-[11px] font-bold tracking-widest text-base-content/60 uppercase">Terakhir Dilihat / Lokasi Hilang</h3>
+                    <div class="card bg-base-200/60 border border-base-300 shadow-sm rounded-2xl">
+                        <div class="card-body p-6">
+                            <p class="font-medium text-lg text-base-content/90">{{ report.location }}</p>
+                        </div>
                     </div>
                 </div>
-            {% endif %}
 
-            {% if request.user.is_authenticated and request.user.id != report.user_id %}
-                <a href="{% url 'web:open-chat' report.id %}" class="btn btn-primary btn-block">Hubungi pelapor</a>
-            {% endif %}
+                <!-- Description Block -->
+                <div class="flex flex-col gap-3">
+                    <h3 class="text-[11px] font-bold tracking-widest text-primary uppercase">Deskripsi / Ciri-ciri Khusus</h3>
+                    <div class="card bg-base-200/60 border border-base-300 shadow-sm rounded-2xl border-l-4 border-l-primary">
+                        <div class="card-body p-6">
+                            <p class="text-base-content/80 leading-relaxed whitespace-pre-line">{{ report.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Button -->
+            <div class="mt-8">
+                {% if request.user.is_authenticated and request.user.id != report.user_id %}
+                    <a href="{% url 'web:open-chat' report.id %}" class="btn btn-primary w-full rounded-2xl h-14 text-base font-bold shadow-md gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd" />
+                        </svg>
+                        Chat Pelapor
+                    </a>
+                {% endif %}
+            </div>
+
         </div>
     </section>
 {% endblock %}
