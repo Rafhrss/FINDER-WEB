@@ -8,11 +8,13 @@ from web.views import (
     profile_view,
     report_create_view,
     report_detail_view,
+    search_view,
 )
 
 urlpatterns = [
     path("logout/", logout_view, name="logout"),
     path("", home_view, name="home"),
+    path("search/", search_view, name="search"),
     path("reports/create/", report_create_view, name="report-create"),
     path("reports/<int:report_id>/", report_detail_view, name="report-detail"),
     path("reports/<int:report_id>/chat/", open_chatroom_view, name="open-chat"),
