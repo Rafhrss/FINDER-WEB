@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cari Barang - Finder Kampus{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center max-w-4xl mx-auto mb-12 mt-8">
+    <h1 class="text-3xl md:text-4xl font-bold mb-8 text-center">Cari Barang</h1>
+
+    <!-- Search Form -->
+    <form method="get" action="{% url 'web:search' %}" class="w-full mb-8">
+        {% if selected_filter %}
+        <input type="hidden" name="filter" value="{{ selected_filter }}">
+        {% endif %}
+
+        <div class="flex items-center w-full rounded-2xl border border-base-content/30 bg-base-200 px-6 py-3 gap-4 focus-within:border-primary focus-within:shadow-[0_0_0_3px_rgba(61,255,160,0.25)] transition-all">
+            <svg class="w-6 h-6 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" name="q" value="{{ selected_keyword }}" placeholder="Ketik nama barang, lokasi, atau kategori..." class="flex-1 bg-transparent border-none outline-none ring-0 focus:outline-none focus:ring-0 focus:border-none text-base-content placeholder:text-base-content/40 text-base" />
+            <button type="submit" class="btn btn-primary rounded-xl px-8 min-h-0 h-12 shrink-0 text-base font-bold">Cari</button>
+        </div>
+    </form>
+
+
+    <!-- Filters -->
+    <div class="flex gap-3 w-full">
+        <!-- Semua -->
+        <a href="{% url 'web:search' %}?q={{ selected_keyword|urlencode }}" class="btn flex-1 rounded-xl h-12 min-h-0 text-base font-semibold {% if not selected_filter %}btn-primary{% else %}bg-base-200 border-none text-base-content hover:bg-base-300{% endif %}">
+            Semua
+        </a>
+
+        <!-- Barang Hilang -->
+        <a href="{% url 'web:search' %}?q={{ selected_keyword|urlencode }}&filter=LOST" class="btn flex-1 rounded-xl h-12 min-h-0 text-base font-semibold {% if selected_filter == 'LOST' %}btn-error text-white{% else %}bg-base-200 border-none text-error hover:bg-base-300{% endif %}">
+            Barang Hilang
+        </a>
+
+        <!-- Barang Ditemukan -->
+        <a href="{% url 'web:search' %}?q={{ selected_keyword|urlencode }}&filter=FOUND" class="btn flex-1 rounded-xl h-12 min-h-0 text-base font-semibold {% if selected_filter == 'FOUND' %}btn-warning text-white{% else %}bg-base-200 border-none text-warning hover:bg-base-300{% endif %}">
+            Barang Ditemukan
+        </a>
+
+        <!-- Telah Selesai -->
+        <a href="{% url 'web:search' %}?q={{ selected_keyword|urlencode }}&filter=CLAIMED" class="btn flex-1 rounded-xl h-12 min-h-0 text-base font-semibold {% if selected_filter == 'CLAIMED' %}btn-success text-white{% else %}bg-base-200 border-none text-success hover:bg-base-300{% endif %}">
+            Telah Selesai
+        </a>
+    </div>
+</div>
+
+<!-- Grid Laporan -->
+<section class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-12">
+    {% for report in page_obj %}
+        {% include "partials/_report_card.html" with report=report %}
+    {% empty %}
+        <div class="col-span-full rounded-2xl border border-dashed border-base-300 bg-base-200/60 p-12 text-center flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-base-content/30 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <h3 class="text-xl font-bold mb-2">Tidak ditemukan</h3>
+            <p class="text-base-content/70 max-w-md mx-auto">Kami tidak dapat menemukan barang yang sesuai dengan kata kunci atau filter pencarian Anda. Coba gunakan kata kunci lain.</p>
+        </div>
+    {% endfor %}
+</section>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<div class="flex justify-center mb-8">
+    <div class="join">
+        {% if page_obj.has_previous %}
+        <a href="?q={{ selected_keyword|urlencode }}&filter={{ selected_filter }}&page={{ page_obj.previous_page_number }}" class="join-item btn btn-sm md:btn-md bg-base-200 border-none">«</a>
+        {% endif %}
+        
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <button class="join-item btn btn-sm md:btn-md btn-primary">{{ num }}</button>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?q={{ selected_keyword|urlencode }}&filter={{ selected_filter }}&page={{ num }}" class="join-item btn btn-sm md:btn-md bg-base-200 border-none">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        
+        {% if page_obj.has_next %}
+        <a href="?q={{ selected_keyword|urlencode }}&filter={{ selected_filter }}&page={{ page_obj.next_page_number }}" class="join-item btn btn-sm md:btn-md bg-base-200 border-none">»</a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

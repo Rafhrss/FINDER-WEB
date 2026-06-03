@@ -1,3 +1,4 @@
+from django.db.models import Q
 from apps.reports.models import Report
 
 
@@ -13,7 +14,11 @@ def list_reports(
     if location:
         queryset = queryset.filter(location__icontains=location)
     if keyword:
-        queryset = queryset.filter(title__icontains=keyword)
+        queryset = queryset.filter(
+            Q(title__icontains=keyword) |
+            Q(location__icontains=keyword) |
+            Q(description__icontains=keyword)
+        )
     return queryset
 
 

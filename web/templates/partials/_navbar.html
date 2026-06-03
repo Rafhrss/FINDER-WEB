@@ -9,7 +9,7 @@
                 </div>
                 <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-200 rounded-box w-52">
                     <li><a href="{% url 'web:home' %}" class="{% if request.resolver_match.url_name == 'home' %}text-primary font-medium{% endif %}">Beranda</a></li>
-                    <li><a href="#">Cari Barang</a></li>
+                    <li><a href="{% url 'web:search' %}" class="{% if request.resolver_match.url_name == 'search' %}text-primary font-medium{% endif %}">Cari Barang</a></li>
                     <li><a href="{% url 'web:report-create' %}" class="{% if request.resolver_match.url_name == 'report-create' %}text-primary font-medium{% endif %}">Tambah Laporan</a></li>
                     <li><a href="#">Laporanku</a></li>
                 </ul>
@@ -24,7 +24,7 @@
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1 text-sm text-base-content/70">
                 <li><a href="{% url 'web:home' %}" class="{% if request.resolver_match.url_name == 'home' %}text-primary font-medium{% endif %}">Beranda</a></li>
-                <li><a href="#">Cari Barang</a></li>
+                <li><a href="{% url 'web:search' %}" class="{% if request.resolver_match.url_name == 'search' %}text-primary font-medium{% endif %}">Cari Barang</a></li>
                 <li><a href="{% url 'web:report-create' %}" class="{% if request.resolver_match.url_name == 'report-create' %}text-primary font-medium{% endif %}">Tambah Laporan</a></li>
                 <li><a href="#">Laporanku</a></li>
             </ul>
