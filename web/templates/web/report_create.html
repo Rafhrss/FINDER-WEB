@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}Buat Laporan Baru{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Form Container -->
+    <div class="card bg-base-200/40 shadow-xl border border-base-300 rounded-3xl p-6 md:p-10">
+        
+        <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-8">
+            {% csrf_token %}
+            
+            <!-- Header Section: Title & Status -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-base-300/50">
+                <h1 class="text-3xl font-bold text-primary">Buat Laporan Baru</h1>
+                
+                <!-- Status Toggle (Radio Buttons) -->
+                <div class="flex gap-4">
+                    <label class="cursor-pointer relative">
+                        <input type="radio" name="status" value="LOST" class="peer sr-only" required>
+                        <div class="px-6 py-2.5 rounded-xl border border-base-content/20 text-base-content/60 peer-checked:border-error peer-checked:text-error peer-checked:bg-error/5 transition-all font-semibold text-sm">
+                            Barang Hilang
+                        </div>
+                    </label>
+                    <label class="cursor-pointer relative">
+                        <input type="radio" name="status" value="FOUND" class="peer sr-only" required>
+                        <div class="px-6 py-2.5 rounded-xl border border-base-content/20 text-base-content/60 peer-checked:border-warning peer-checked:text-warning peer-checked:bg-warning/5 transition-all font-semibold text-sm">
+                            Barang Ditemukan
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Two Column Grid for Form Fields -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                
+                <!-- Left Column -->
+                <div class="flex flex-col gap-8">
+                    
+                    <!-- Nama Barang -->
+                    <div class="form-control w-full">
+                        <label class="label pt-0 pb-2">
+                            <span class="label-text text-xs font-bold tracking-widest uppercase text-base-content/70">Nama Barang</span>
+                        </label>
+                        <input type="text" name="title" placeholder="Contoh: Dompet Kulit Coklat" class="input input-bordered bg-base-200/50 focus:bg-base-200 w-full rounded-xl transition-all" required value="{{ request_post.title|default:'' }}">
+                    </div>
+
+                    <!-- Lokasi Utama -->
+                    <div class="form-control w-full">
+                        <label class="label pt-0 pb-2">
+                            <span class="label-text text-xs font-bold tracking-widest uppercase text-base-content/70">Lokasi Terakhir / Ditemukan</span>
+                        </label>
+                        <select name="location" class="select select-bordered bg-base-200/50 focus:bg-base-200 w-full rounded-xl transition-all font-normal" required>
+                            <option value="" disabled {% if not request_post.location %}selected{% endif %}>Pilih Gedung / Area...</option>
+                            <optgroup label="Gedung">
+                                <option value="Gedung A" {% if request_post.location == 'Gedung A' %}selected{% endif %}>Gedung A</option>
+                                <option value="Gedung B" {% if request_post.location == 'Gedung B' %}selected{% endif %}>Gedung B</option>
+                                <option value="Gedung C" {% if request_post.location == 'Gedung C' %}selected{% endif %}>Gedung C</option>
+                                <option value="Gedung D" {% if request_post.location == 'Gedung D' %}selected{% endif %}>Gedung D</option>
+                                <option value="Gedung E" {% if request_post.location == 'Gedung E' %}selected{% endif %}>Gedung E</option>
+                                <option value="Gedung F" {% if request_post.location == 'Gedung F' %}selected{% endif %}>Gedung F</option>
+                                <option value="Gedung G" {% if request_post.location == 'Gedung G' %}selected{% endif %}>Gedung G</option>
+                            </optgroup>
+                            <optgroup label="Parkiran">
+                                <option value="Parkiran A" {% if request_post.location == 'Parkiran A' %}selected{% endif %}>Parkiran A</option>
+                                <option value="Parkiran D" {% if request_post.location == 'Parkiran D' %}selected{% endif %}>Parkiran D</option>
+                                <option value="Parkiran F" {% if request_post.location == 'Parkiran F' %}selected{% endif %}>Parkiran F</option>
+                                <option value="Parkiran G" {% if request_post.location == 'Parkiran G' %}selected{% endif %}>Parkiran G</option>
+                                <option value="Parkiran Lapangan" {% if request_post.location == 'Parkiran Lapangan' %}selected{% endif %}>Parkiran Lapangan</option>
+                            </optgroup>
+                            <optgroup label="Fasilitas Umum">
+                                <option value="Kantin Utama" {% if request_post.location == 'Kantin Utama' %}selected{% endif %}>Kantin Utama</option>
+                                <option value="Perpustakaan" {% if request_post.location == 'Perpustakaan' %}selected{% endif %}>Perpustakaan</option>
+                                <option value="Mushola Kampus" {% if request_post.location == 'Mushola Kampus' %}selected{% endif %}>Mushola Kampus</option>
+                            </optgroup>
+                            <optgroup label="Laboratorium">
+                                <option value="Lab Software" {% if request_post.location == 'Lab Software' %}selected{% endif %}>Lab Software</option>
+                                <option value="Lab Hardware" {% if request_post.location == 'Lab Hardware' %}selected{% endif %}>Lab Hardware</option>
+                                <option value="Lab Komputer Gedung E" {% if request_post.location == 'Lab Komputer Gedung E' %}selected{% endif %}>Lab Komputer Gedung E</option>
+                            </optgroup>
+                            <option value="Lainnya" {% if request_post.location == 'Lainnya' %}selected{% endif %}>Lainnya</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- Right Column -->
+                <div class="flex flex-col gap-8">
+                    
+                    <!-- Deskripsi -->
+                    <div class="form-control w-full h-full">
+                        <label class="label pt-0 pb-2">
+                            <span class="label-text text-xs font-bold tracking-widest uppercase text-base-content/70">Deskripsi / Ciri-ciri Khusus</span>
+                        </label>
+                        <textarea name="description" class="textarea textarea-bordered bg-base-200/50 focus:bg-base-200 w-full rounded-xl transition-all grow resize-none min-h-64 leading-relaxed" placeholder="Warna :&#10;Jumlah :&#10;Merk :&#10;Ukuran :" required>{{ request_post.description|default:'' }}</textarea>
+                    </div>
+
+                </div>
+
+                <!-- Full Width: Upload Foto -->
+                <div class="form-control w-full md:col-span-2 mt-2">
+                    <label class="label pt-0 pb-2">
+                        <span class="label-text text-xs font-bold tracking-widest uppercase text-base-content/70">Unggah Foto (Opsional)</span>
+                    </label>
+                    <label id="uploadBox" class="flex flex-col items-center justify-center w-full h-36 border-2 border-primary/50 border-dashed rounded-2xl cursor-pointer bg-base-200/20 hover:bg-base-200/50 transition-colors group">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6 text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-3 group-hover:scale-110 transition-transform">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                            </svg>
+                            <p class="font-bold text-base-content/80 text-sm">Pilih Foto Barang</p>
+                        </div>
+                        <input type="file" name="image" accept="image/*" class="hidden" id="imageInput" onchange="previewImage(event)"/>
+                    </label>
+                    <div id="imagePreviewContainer" class="mt-4 hidden relative w-32 h-32 rounded-xl overflow-hidden border border-base-300">
+                        <img id="imagePreview" src="" alt="Preview" class="w-full h-full object-cover">
+                        <button type="button" onclick="clearImage()" class="absolute top-1 right-1 btn btn-xs btn-circle btn-error text-white opacity-80 hover:opacity-100">✕</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer: Submit Button -->
+            <div class="flex justify-end pt-4 mt-2">
+                <button type="submit" class="btn btn-primary w-full md:w-auto px-10 rounded-xl font-bold text-base shadow-lg hover:-translate-y-0.5 transition-transform">
+                    Kirim Laporan
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- Simple Script for Image Preview -->
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const previewImage = document.getElementById('imagePreview');
+        const uploadBox = document.getElementById('uploadBox');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewContainer.classList.remove('hidden');
+                uploadBox.classList.add('hidden');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    function clearImage() {
+        const input = document.getElementById('imageInput');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const uploadBox = document.getElementById('uploadBox');
+        
+        input.value = ''; // Clear file
+        previewContainer.classList.add('hidden');
+        uploadBox.classList.remove('hidden');
+    }
+</script>
+{% endblock %}
