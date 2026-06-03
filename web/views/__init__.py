@@ -1,4 +1,4 @@
-from web.views.auth import login_view, logout_view
+from web.views.auth import logout_view
 from web.views.chats import chat_room_view, open_chatroom_view
 from web.views.home import home_view
 from web.views.profile import profile_view

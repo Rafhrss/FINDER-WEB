@@ -171,3 +171,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
 }
+
+# Login settings
+LOGIN_URL = "account_login"
+LOGIN_REDIRECT_URL = "web:home"

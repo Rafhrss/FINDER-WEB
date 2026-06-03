@@ -3,7 +3,6 @@ from django.urls import path
 from web.views import (
     chat_room_view,
     home_view,
-    login_view,
     logout_view,
     open_chatroom_view,
     profile_view,
@@ -12,7 +11,6 @@ from web.views import (
 )
 
 urlpatterns = [
-    path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
     path("", home_view, name="home"),
     path("reports/create/", report_create_view, name="report-create"),
