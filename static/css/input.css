@@ -3,6 +3,9 @@
 @source not "./tailwindcss";
 @source not "./daisyui{,*}.mjs";
 
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
 @plugin "./daisyui.mjs";
 @plugin "./daisyui-theme.mjs" {
   name: "finder";
