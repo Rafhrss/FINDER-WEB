@@ -1,10 +1,12 @@
+{% load static %}
+
 <nav class="navbar bg-base-200/70 border-b border-base-300 backdrop-blur sticky top-0 z-50">
     <div class="navbar-start">
         <div class="dropdown lg:hidden">
             <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
             </div>
-            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-200 rounded-box w-52">
+            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-200 rounded-box w-52">
                 <li><a href="{% url 'web:home' %}" class="{% if request.resolver_match.url_name == 'home' %}text-primary font-medium{% endif %}">Beranda</a></li>
                 <li><a href="#">Cari Barang</a></li>
                 <li><a href="{% url 'web:report-create' %}" class="{% if request.resolver_match.url_name == 'report-create' %}text-primary font-medium{% endif %}">Tambah Laporan</a></li>
@@ -12,9 +14,8 @@
             </ul>
         </div>
         <a class="btn btn-ghost text-xl tracking-wider gap-2 font-bold" href="{% url 'web:home' %}">
-            <div class="text-primary">
-                <!-- Placeholder Logo (ganti dengan logo asli nanti) -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><rect x="9" y="8" width="4" height="6" rx="1"></rect></svg>
+            <div class="flex items-center">
+                <img src="{% static 'images/logo.png' %}" alt="Finder Kampus Logo" class="h-16 w-auto">
             </div>
             FINDER
         </a>
