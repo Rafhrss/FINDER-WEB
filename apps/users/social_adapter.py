@@ -17,7 +17,7 @@ class CampusSocialAccountAdapter(DefaultSocialAccountAdapter):
         except ValidationError as exc:
             if request is not None:
                 messages.error(request, " ".join(exc.messages))
-                raise ImmediateHttpResponse(redirect("web:login")) from exc
+                raise ImmediateHttpResponse(redirect("account_login")) from exc
             raise
 
         existing_user = get_user_by_email(normalized_email)
