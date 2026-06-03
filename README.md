@@ -45,13 +45,21 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-## Tailwind CSS
+## Tailwind CSS with DaisyUI
 
-Install Tailwind dependencies:
+### Setup: Download Tailwind Binary and DaisyUI
 
+**For Linux/macOS:**
 ```bash
-python manage.py tailwind install
+cd static/css && curl -sL daisyui.com/fast | bash
 ```
+
+**For Windows (PowerShell):**
+```bash
+cd static/css && powershell -c "irm daisyui.com/fast.ps1 | iex"
+```
+
+This command will download the tailwindcss binary and setup DaisyUI automatically.
 
 ### Development: Run Django + Tailwind together
 

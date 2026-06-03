@@ -3,9 +3,10 @@
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
-    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-      "Courier New", monospace;
+    --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
     --color-red-400: oklch(70.4% 0.191 22.216);
     --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-800: oklch(44.4% 0.177 26.899);
@@ -70,11 +71,6 @@
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
-    --color-umkt-navy: #0e182a;
-    --color-umkt-green: #1df29f;
-    --color-umkt-btn-bg: #121b2d;
-    --color-umkt-btn-border: #222f45;
-    --background-image-umkt-glow: radial-gradient(circle at top left, rgba(29, 242, 159, 0.1), transparent 50%), radial-gradient(circle at bottom right, rgba(5, 10, 16, 0.8), transparent 50%);
   }
 }
 @layer base {
@@ -88,7 +84,7 @@
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
     tab-size: 4;
-    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji');
     font-feature-settings: var(--default-font-feature-settings, normal);
     font-variation-settings: var(--default-font-variation-settings, normal);
     -webkit-tap-highlight-color: transparent;
@@ -115,7 +111,7 @@
     font-weight: bolder;
   }
   code, kbd, samp, pre {
-    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace);
     font-feature-settings: var(--default-mono-font-feature-settings, normal);
     font-variation-settings: var(--default-mono-font-variation-settings, normal);
     font-size: 1em;
@@ -215,13 +211,13 @@
   :-moz-ui-invalid {
     box-shadow: none;
   }
-  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+  button, input:where([type='button'], [type='reset'], [type='submit']), ::file-selector-button {
     appearance: button;
   }
   ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
     height: auto;
   }
-  [hidden]:where(:not([hidden="until-found"])) {
+  [hidden]:where(:not([hidden='until-found'])) {
     display: none !important;
   }
 }
@@ -4813,9 +4809,6 @@
   .z-50 {
     z-index: 50;
   }
-  .z-\[1\] {
-    z-index: 1;
-  }
   .tab-content {
     @layer daisyui.l1.l2.l3 {
       order: var(--tabcontent-order);
@@ -6759,12 +6752,6 @@
     --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
-  .scale-110 {
-    --tw-scale-x: 110%;
-    --tw-scale-y: 110%;
-    --tw-scale-z: 110%;
-    scale: var(--tw-scale-x) var(--tw-scale-y);
-  }
   .swap-rotate {
     @layer daisyui.l1.l2 {
       .swap-on, input:indeterminate ~ .swap-on {
@@ -7307,9 +7294,6 @@
   .border-success {
     border-color: var(--color-success);
   }
-  .border-umkt-btn-border {
-    border-color: var(--color-umkt-btn-border);
-  }
   .border-warning {
     border-color: var(--color-warning);
   }
@@ -7537,12 +7521,6 @@
   .bg-teal-400 {
     background-color: var(--color-teal-400);
   }
-  .bg-umkt-btn-bg {
-    background-color: var(--color-umkt-btn-bg);
-  }
-  .bg-umkt-navy {
-    background-color: var(--color-umkt-navy);
-  }
   .divider-accent {
     @layer daisyui.l1.l2 {
       &:before, &:after {
@@ -7642,9 +7620,6 @@
       box-shadow: none;
       background-image: none;
     }
-  }
-  .bg-umkt-glow {
-    background-image: var(--background-image-umkt-glow);
   }
   .from-base-300\/90 {
     --tw-gradient-from: var(--color-base-300);
@@ -9880,11 +9855,6 @@
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
   }
-  .focus\:ring-umkt-green {
-    &:focus {
-      --tw-ring-color: var(--color-umkt-green);
-    }
-  }
   .focus\:outline-none {
     &:focus {
       --tw-outline-style: none;
@@ -10640,74 +10610,6 @@
     padding: 3px;
   }
 }
-@layer base {
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme]) {
-      color-scheme: dark;
-      --color-base-100: #060e17;
-      --color-base-200: #0b1522;
-      --color-base-300: #111e2c;
-      --color-base-content: #e6f1ff;
-      --color-primary: #0af3b9;
-      --color-primary-content: #02130d;
-      --color-secondary: #1d9bf0;
-      --color-secondary-content: #061624;
-      --color-accent: #f59e0b;
-      --color-accent-content: #231600;
-      --color-neutral: #0f172a;
-      --color-neutral-content: #e2e8f0;
-      --color-info: #38bdf8;
-      --color-info-content: #06202d;
-      --color-success: #22c55e;
-      --color-success-content: #06200f;
-      --color-warning: #fbbf24;
-      --color-warning-content: #231600;
-      --color-error: #ef4444;
-      --color-error-content: #220606;
-      --radius-selector: 0.5rem;
-      --radius-field: 0.5rem;
-      --radius-box: 0.75rem;
-      --size-selector: 0.25rem;
-      --size-field: 0.25rem;
-      --border: 1px;
-      --depth: 1;
-      --noise: 0;
-    }
-  }
-}
-@layer base {
-  :where(:root),:root:has(input.theme-controller[value=finder]:checked),[data-theme="finder"] {
-    color-scheme: dark;
-    --color-base-100: #060e17;
-    --color-base-200: #0b1522;
-    --color-base-300: #111e2c;
-    --color-base-content: #e6f1ff;
-    --color-primary: #0af3b9;
-    --color-primary-content: #02130d;
-    --color-secondary: #1d9bf0;
-    --color-secondary-content: #061624;
-    --color-accent: #f59e0b;
-    --color-accent-content: #231600;
-    --color-neutral: #0f172a;
-    --color-neutral-content: #e2e8f0;
-    --color-info: #38bdf8;
-    --color-info-content: #06202d;
-    --color-success: #22c55e;
-    --color-success-content: #06200f;
-    --color-warning: #fbbf24;
-    --color-warning-content: #231600;
-    --color-error: #ef4444;
-    --color-error-content: #220606;
-    --radius-selector: 0.5rem;
-    --radius-field: 0.5rem;
-    --radius-box: 0.75rem;
-    --size-selector: 0.25rem;
-    --size-field: 0.25rem;
-    --border: 1px;
-    --depth: 1;
-    --noise: 0;
-  }
-}
 @property --tw-translate-x {
   syntax: "*";
   inherits: false;
@@ -10722,21 +10624,6 @@
   syntax: "*";
   inherits: false;
   initial-value: 0;
-}
-@property --tw-scale-x {
-  syntax: "*";
-  inherits: false;
-  initial-value: 1;
-}
-@property --tw-scale-y {
-  syntax: "*";
-  inherits: false;
-  initial-value: 1;
-}
-@property --tw-scale-z {
-  syntax: "*";
-  inherits: false;
-  initial-value: 1;
 }
 @property --tw-rotate-x {
   syntax: "*";
@@ -10980,6 +10867,21 @@
   syntax: "*";
   inherits: false;
 }
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
 @keyframes pulse {
   50% {
     opacity: 0.5;
@@ -10991,9 +10893,6 @@
       --tw-translate-x: 0;
       --tw-translate-y: 0;
       --tw-translate-z: 0;
-      --tw-scale-x: 1;
-      --tw-scale-y: 1;
-      --tw-scale-z: 1;
       --tw-rotate-x: initial;
       --tw-rotate-y: initial;
       --tw-rotate-z: initial;
@@ -11050,6 +10949,9 @@
       --tw-backdrop-saturate: initial;
       --tw-backdrop-sepia: initial;
       --tw-duration: initial;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-scale-z: 1;
     }
   }
 }
