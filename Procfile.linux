@@ -1,0 +1,2 @@
+web: python manage.py runserver
+css:  static/linux/css/tailwindcss -i static/linux/css/input.css -o static/linux/css/output.css --watch
