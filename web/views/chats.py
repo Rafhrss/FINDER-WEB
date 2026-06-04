@@ -63,9 +63,12 @@ def chat_room_view(request, chatroom_id: int):
             messages.error(request, str(exc))
         return redirect("web:chat-room", chatroom_id=chatroom.id)
 
+    all_chatrooms = list_chatrooms_for_user(user=request.user)
+
     context = {
         "chatroom": chatroom,
         "chat_messages": room_messages,
         "can_send": can_send,
+        "chatrooms": all_chatrooms,
     }
     return render(request, "web/chat_room.html", context)

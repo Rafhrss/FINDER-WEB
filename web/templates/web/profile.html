@@ -8,13 +8,7 @@
     <aside class="w-full lg:w-[320px] bg-[#0A111A] flex flex-col items-center py-12 px-6 border-b lg:border-b-0 lg:border-r border-app-border/20 shrink-0">
         <!-- Avatar -->
         <div class="w-32 h-32 rounded-full border-2 border-app-primary flex items-center justify-center mb-6 relative overflow-hidden bg-app-surface shrink-0">
-            {% if profile_user.profile_picture %}
-                <img src="{{ profile_user.profile_picture.url }}" alt="{{ profile_user.name }}" class="w-full h-full object-cover">
-            {% else %}
-                <svg class="w-16 h-16 text-app-primary" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-            {% endif %}
+            {% include 'partials/_user_avatar.html' with user=profile_user %}
         </div>
 
         <!-- User Info -->

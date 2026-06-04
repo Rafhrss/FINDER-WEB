@@ -5,7 +5,7 @@
     <!-- Carousel Section -->
     <section class="mb-12 relative">
         <!-- Wrapper Carousel (Scrolling Container) -->
-        <div class="carousel w-full rounded-3xl shadow-lg bg-gradient-to-r from-[#101A24] to-[#0A121A] overflow-hidden">
+        <div class="carousel w-full rounded-3xl shadow-lg bg-linear-to-r from-[#101A24] to-[#0A121A] overflow-hidden">
             {% with carousel_reports=reports|slice:":3" %}
             {% for report in carousel_reports %}
             <div id="slide{{ forloop.counter }}" class="carousel-item relative w-full hover:brightness-105 transition-all">
@@ -19,7 +19,7 @@
                     {% if report.image %}
                         <img src="{{ report.image }}" alt="{{ report.title }}" class="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none">
                     {% endif %}
-                    <div class="absolute inset-0 bg-gradient-to-r from-[#101A24] via-[#101A24]/80 to-transparent pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-linear-to-r from-[#101A24] via-[#101A24]/80 to-transparent pointer-events-none"></div>
 
                     <!-- Status Pill (Matches _report_card.html) -->
                     <div class="absolute top-6 left-6 md:top-8 md:left-8 z-20 pointer-events-none">
