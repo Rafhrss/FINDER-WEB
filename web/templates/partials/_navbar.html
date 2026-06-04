@@ -44,13 +44,9 @@
             
             <!-- User Avatar -->
             <div class="dropdown dropdown-end">
-                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                    <div class="w-8 rounded-full bg-primary/20 text-primary flex items-center justify-center ring ring-primary/30 ring-offset-base-100 ring-offset-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mt-1">
-                          <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
-                         </svg>
-                        </div>
-                    </div>
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar ring ring-primary/30 ring-offset-base-100 ring-offset-2 overflow-hidden w-9 h-9">
+                    {% include 'partials/_user_avatar.html' with user=request.user %}
+                </div>
                     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-200 rounded-box w-52">
                         <li><a href="{% url 'web:profile' %}">Profil</a></li>
                         <li>

@@ -1,0 +1,33 @@
+<a href="{% url 'web:chat-room' room.id %}" class="block rounded-2xl p-3.5 transition-all duration-200 border {% if active_id == room.id %}border-primary/50 bg-base-300{% else %}border-transparent bg-base-300/60 hover:bg-base-300{% endif %}">
+    <div class="flex items-center gap-3">
+        {# Avatar #}
+        <div class="avatar shrink-0">
+            <div class="w-11 h-11 rounded-full overflow-hidden bg-base-300">
+                {% include 'partials/_user_avatar.html' with user=other_user %}
+            </div>
+        </div>
+
+        {# Name + last message #}
+        <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-center mb-0.5">
+                <h3 class="text-sm font-bold text-base-content truncate pr-2">{{ other_user.name }}</h3>
+                {% with latest=room.prefetched_messages.0 %}
+                    {% if latest %}
+                        <span class="text-[10px] font-semibold {% if active_id == room.id %}text-primary{% else %}text-base-content/40{% endif %} whitespace-nowrap">{{ latest.created_at|date:"H:i" }}</span>
+                    {% else %}
+                        <span class="text-[10px] font-semibold text-primary whitespace-nowrap">Baru</span>
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="flex items-center justify-between">
+                {% with latest=room.prefetched_messages.0 %}
+                    {% if latest %}
+                        <p class="text-xs text-base-content/50 truncate flex-1 pr-2">{{ latest.message }}</p>
+                    {% else %}
+                        <p class="text-xs text-base-content/30 italic truncate flex-1">Belum ada pesan...</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</a>

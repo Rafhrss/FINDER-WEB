@@ -1,0 +1,19 @@
+{% comment %}
+    Re-usable User Avatar Component
+    Parameters:
+    - user: The user object
+    - size_classes: CSS classes for size (e.g. 'w-10 h-10', 'w-12 h-12', 'w-32 h-32') - defaults to full w/h
+{% endcomment %}
+{% with social=user.socialaccount_set.first %}
+    {% if social and social.extra_data.picture %}
+        <img src="{{ social.extra_data.picture }}" alt="{{ user.name }}" class="{{ size_classes|default:'w-full h-full' }} rounded-full object-cover">
+    {% elif user.profile_picture %}
+        <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}" class="{{ size_classes|default:'w-full h-full' }} rounded-full object-cover">
+    {% else %}
+        <div class="{{ size_classes|default:'w-full h-full' }} rounded-full flex items-center justify-center bg-primary/20 text-primary font-bold shadow-inner">
+            <span class="opacity-80">
+                {% if user.name %}{{ user.name|slice:":2"|upper }}{% else %}?{% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% endwith %}
