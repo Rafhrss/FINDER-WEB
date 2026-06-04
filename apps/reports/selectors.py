@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Count
 from apps.reports.models import Report
 
 
@@ -27,4 +27,6 @@ def get_report_by_id(report_id: int) -> Report | None:
 
 
 def get_reports_by_owner(user):
-    return Report.objects.filter(user=user).order_by("-created_at")
+    return Report.objects.filter(user=user).annotate(
+        chat_rooms_count=Count("chat_rooms")
+    ).order_by("-created_at")

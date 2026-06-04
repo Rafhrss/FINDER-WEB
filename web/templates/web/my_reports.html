@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Kelola Laporan Anda - Finder{% endblock %}
+
+{% block content %}
+    <!-- BEGIN: Main Content Area -->
+    <main class="flex-1 flex flex-col py-6">
+        <!-- Page Header -->
+        <div class="mb-10">
+            <h1 class="text-3xl font-bold mb-8 text-center text-white">Kelola Laporan Anda</h1>
+            
+            <!-- Filter Tabs -->
+            <div class="flex flex-wrap items-center justify-start gap-4">
+                <a href="{% url 'web:my-reports' %}" class="px-6 py-2.5 rounded-md font-semibold transition-all duration-200 {% if not status_filter %}bg-brand-primary text-brand-bg hover:bg-brand-primary-hover{% else %}bg-brand-surface border border-brand-border text-brand-text hover:bg-brand-surface/80{% endif %}">
+                    Semua ({{ all_count }})
+                </a>
+                <a href="{% url 'web:my-reports' %}?status=LOST" class="px-6 py-2.5 rounded-md font-semibold transition-all duration-200 {% if status_filter == 'LOST' %}bg-brand-danger text-white hover:bg-brand-danger/90{% else %}bg-brand-surface border border-brand-border text-brand-danger hover:bg-brand-surface/80{% endif %}">
+                    Hilang
+                </a>
+                <a href="{% url 'web:my-reports' %}?status=FOUND" class="px-6 py-2.5 rounded-md font-semibold transition-all duration-200 {% if status_filter == 'FOUND' %}bg-brand-warning text-white hover:bg-brand-warning/90{% else %}bg-brand-surface border border-brand-border text-brand-warning hover:bg-brand-surface/80{% endif %}">
+                    Ditemukan
+                </a>
+                <a href="{% url 'web:my-reports' %}?status=CLAIMED" class="px-6 py-2.5 rounded-md font-semibold transition-all duration-200 {% if status_filter == 'CLAIMED' %}bg-brand-primary text-brand-bg hover:bg-brand-primary-hover{% else %}bg-brand-surface border border-brand-border text-brand-primary hover:bg-brand-surface/80{% endif %}">
+                    Selesai
+                </a>
+            </div>
+        </div>
+
+        <!-- BEGIN: Report List -->
+        <div class="flex flex-col gap-4">
+            {% for report in page_obj %}
+                <!-- Report Card (Entire card is clickable, hover style added) -->
+                <div onclick="window.location='{% url 'web:report-detail' report.id %}'" class="cursor-pointer bg-brand-surface rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border {% if report.status == 'CLAIMED' %}border-brand-primary/20{% else %}border-brand-border/50{% endif %} shadow-sm hover:border-brand-primary/40 transition-all duration-200">
+                    
+                    <!-- Left: Status Icon & Info Grid -->
+                    <div class="flex items-center gap-6 grow min-w-0 w-full">
+                        <!-- Icon Status -->
+                        {% if report.status == 'LOST' %}
+                            <div class="w-14 h-14 rounded-xl border border-brand-danger/30 bg-brand-bg flex items-center justify-center text-brand-danger shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                                </svg>
+                            </div>
+                        {% elif report.status == 'FOUND' %}
+                            <div class="w-14 h-14 rounded-xl border border-brand-warning/30 bg-brand-bg flex items-center justify-center text-brand-warning shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                                </svg>
+                            </div>
+                        {% elif report.status == 'CLAIMED' %}
+                            <div class="w-14 h-14 rounded-xl border border-brand-primary/30 bg-brand-bg flex items-center justify-center text-brand-primary shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                        {% endif %}
+
+                        <!-- Info Grid -->
+                        <div class="ml-0 md:ml-6 grow grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                            <!-- Title & Status Text -->
+                            <div class="min-w-0">
+                                <h3 class="text-[17px] font-semibold text-white mb-1.5 truncate">{{ report.title }}</h3>
+                                {% if report.status == 'LOST' %}
+                                    <p class="text-[12px] font-bold text-brand-danger tracking-wider">STATUS: HILANG</p>
+                                {% elif report.status == 'FOUND' %}
+                                    <p class="text-[12px] font-bold text-brand-warning tracking-wider">STATUS: DITEMUKAN</p>
+                                {% elif report.status == 'CLAIMED' %}
+                                    <p class="text-[12px] font-bold text-brand-primary tracking-wider">KASUS SELESAI</p>
+                                {% endif %}
+                            </div>
+
+                            <!-- Location -->
+                            <div class="md:pl-6 md:border-l border-brand-border/50 h-full flex flex-col justify-center min-w-0">
+                                <span class="text-[12px] text-brand-text-muted mb-1">Lokasi</span>
+                                <p class="text-[15px] text-brand-text-muted truncate">{{ report.location }}</p>
+                            </div>
+
+                            <!-- Date -->
+                            <div class="md:pl-6 md:border-l border-brand-border/50 h-full flex flex-col justify-center">
+                                {% if report.status == 'CLAIMED' %}
+                                    <span class="text-[12px] text-brand-text-muted mb-1">Selesai pada</span>
+                                {% else %}
+                                    <span class="text-[12px] text-brand-text-muted mb-1">Tanggal Lapor</span>
+                                {% endif %}
+                                <p class="text-[15px] text-brand-text-muted">{{ report.created_at|date:"d F Y" }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Quick Actions & Obrolan Count -->
+                    <div class="flex items-center gap-4 shrink-0 justify-end w-full sm:w-auto" onclick="event.stopPropagation();">
+                        <!-- Chat badge count -->
+                        {% if report.chat_rooms_count %}
+                            <span class="badge badge-sm bg-brand-primary/10 border border-brand-primary/20 text-brand-primary font-semibold px-2.5 py-3.5 rounded-lg flex items-center gap-1 text-xs shrink-0" title="Chat Aktif">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5">
+                                    <path fill-rule="evenodd" d="M3.43 2.524A49.503 49.503 0 0110 2c2.278 0 4.477.16 6.57.47a1.75 1.75 0 011.43 1.738v8.583a1.75 1.75 0 01-1.43 1.737 49.63 49.63 0 01-4.819.432L7.29 17.72A.75.75 0 016 17.184v-2.073A49.19 49.19 0 013.43 13.9a1.75 1.75 0 01-1.43-1.737V4.262a1.75 1.75 0 011.43-1.738z" clip-rule="evenodd" />
+                                </svg>
+                                {{ report.chat_rooms_count }}
+                            </span>
+                        {% endif %}
+
+                        <!-- Green Three Dots Action Menu Dropdown -->
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button" class="btn btn-sm btn-circle btn-ghost text-brand-primary shrink-0 hover:bg-brand-surface" aria-label="Menu Aksi">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                </svg>
+                            </div>
+                            <div tabindex="0" class="dropdown-content p-3 shadow-2xl bg-brand-surface border border-brand-border rounded-xl w-32 z-50 mt-1">
+                                <div class="flex flex-col gap-2">
+                                    {% if report.status == 'CLAIMED' %}
+                                        <!-- Case: Selesai (CLAIMED) -> Only Hapus button option -->
+                                        <form method="post" action="{% url 'web:report-delete' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini? Semua percakapan (chat) dan pesan terkait akan dihapus secara permanen.');" class="w-full">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline border-brand-danger hover:bg-brand-danger hover:text-white text-brand-danger rounded-lg w-full text-center font-semibold text-xs py-0">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <!-- Case: Hilang/Ditemukan (LOST/FOUND) -> Show Hapus, Edit, Selesai options -->
+                                        
+                                        <!-- Hapus Action -->
+                                        <form method="post" action="{% url 'web:report-delete' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini? Semua percakapan (chat) dan pesan terkait akan dihapus secara permanen.');" class="w-full">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline border-brand-danger hover:bg-brand-danger hover:text-white text-brand-danger rounded-lg w-full text-center font-semibold text-xs py-0">
+                                                Hapus
+                                            </button>
+                                        </form>
+
+                                        <!-- Edit Action (Goes to detail for editing/viewing) -->
+                                        <a href="{% url 'web:report-detail' report.id %}" class="btn btn-sm btn-outline border-brand-warning hover:bg-brand-warning hover:text-white text-brand-warning rounded-lg w-full text-center font-semibold text-xs py-1.5">
+                                            Edit
+                                        </a>
+
+                                        <!-- Selesai Action (Quickly updates status to CLAIMED) -->
+                                        <form method="post" action="{% url 'web:report-detail' report.id %}" class="w-full">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                            <input type="hidden" name="status" value="CLAIMED">
+                                            <button type="submit" class="btn btn-sm btn-outline border-brand-primary hover:bg-brand-primary hover:text-brand-bg text-brand-primary rounded-lg w-full text-center font-semibold text-xs py-0">
+                                                Selesai
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            {% empty %}
+                <div class="rounded-3xl border border-dashed border-brand-border bg-brand-surface p-12 text-center">
+                    <div class="max-w-sm mx-auto flex flex-col items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-20 h-20 text-brand-text-muted mb-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                        </svg>
+                        <h3 class="text-lg font-bold text-white mb-1">Belum ada laporan</h3>
+                        <p class="text-sm text-brand-text-muted leading-relaxed mb-6">
+                            {% if status_filter %}
+                                Tidak ditemukan laporan dengan status filter ini.
+                            {% else %}
+                                Anda belum pernah membuat laporan barang hilang atau temuan barang di aplikasi ini.
+                            {% endif %}
+                        </p>
+                        {% if status_filter %}
+                            <a href="{% url 'web:my-reports' %}" class="btn btn-ghost btn-sm rounded-xl">Lihat Semua Laporan</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- END: Report List -->
+
+        <!-- Pagination Controls -->
+        {% if page_obj.has_other_pages %}
+            <div class="flex justify-center mt-10">
+                <div class="join bg-brand-surface border border-brand-border rounded-xl p-1 shadow-inner">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="join-item btn btn-ghost btn-sm px-4 text-brand-text">«</a>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <button class="join-item btn btn-primary btn-sm px-4 rounded-lg font-bold bg-brand-primary text-brand-bg border-none">{{ num }}</button>
+                        {% else %}
+                            <a href="?page={{ num }}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="join-item btn btn-ghost btn-sm px-4 text-brand-text-muted">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% if status_filter %}&status={{ status_filter }}{% endif %}" class="join-item btn btn-ghost btn-sm px-4 text-brand-text">»</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </main>
+    <!-- END: Main Content Area -->
+{% endblock %}

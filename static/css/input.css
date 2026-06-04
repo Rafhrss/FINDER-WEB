@@ -57,3 +57,24 @@
 @theme {
   --background-image-umkt-glow: radial-gradient(circle at top left, rgba(29, 242, 159, 0.1), transparent 50%), radial-gradient(circle at bottom right, rgba(5, 10, 16, 0.8), transparent 50%);
 }
+
+@theme {
+  --color-brand-bg: #0B111A;
+  --color-brand-surface: #151E2B;
+  --color-brand-border: #232D3B;
+  --color-brand-primary: #0AF3B9;
+  --color-brand-primary-hover: #08D5A2;
+  --color-brand-danger: #EF4444;
+  --color-brand-warning: #F97316;
+  --color-brand-text: #F3F4F6;
+  --color-brand-text-muted: #9CA3AF;
+
+  --color-app-bg: #0B111A;
+  --color-app-surface: #151E2B;
+  --color-app-border: #232D3B;
+  --color-app-primary: #0AF3B9;
+  --color-app-text: #F8FAFC;
+  --color-app-muted: #94A3B8;
+  --color-app-danger: #EF4444;
+  --color-app-warning: #F97316;
+}

@@ -50,13 +50,15 @@ python manage.py runserver
 ### Setup: Download Tailwind Binary and DaisyUI
 
 **For Linux/macOS:**
+
 ```bash
 cd static/css && curl -sL daisyui.com/fast | bash
 ```
 
 **For Windows (PowerShell):**
+
 ```bash
-cd static/css && powershell -c "irm daisyui.com/fast.ps1 | iex"
+cd static/css ; powershell -c "irm daisyui.com/fast.ps1 | iex"
 ```
 
 This command will download the tailwindcss binary and setup DaisyUI automatically.
@@ -70,6 +72,7 @@ python -m honcho start
 ```
 
 This will start:
+
 - **web**: Django development server at `http://localhost:8000`
 - **tailwind**: Tailwind CSS watcher for automatic CSS compilation
 
@@ -98,6 +101,7 @@ GOOGLE_OAUTH_ALLOWED_CLIENT_IDS=your-google-client-id.apps.googleusercontent.com
 ```
 
 Kemudian:
+
 1. Buat OAuth client di Google Cloud Console.
 2. Tambahkan redirect URI web: `http://localhost:8000/accounts/google/login/callback/`.
 3. Pastikan aplikasi web login lewat `/login/` (tombol **Login dengan Google**).
@@ -117,30 +121,30 @@ Semua endpoint API tersedia di `/api/v1/`. Berikut adalah daftar lengkap endpoin
 
 ### Authentication Users (`/api/v1/users/`)
 
-| Method | Endpoint | Deskripsi | Auth | Status Code |
-|--------|----------|-----------|------|-------------|
-| POST | `google/login/` | Login mobile via Google `id_token`, return app token | ❌ | 200 |
-| POST | `logout/` | Logout (invalidate token) | ✅ | 204 |
-| GET | `me/` | Alias detail user aktif | ✅ | 200 |
+| Method | Endpoint        | Deskripsi                                            | Auth | Status Code |
+| ------ | --------------- | ---------------------------------------------------- | ---- | ----------- |
+| POST   | `google/login/` | Login mobile via Google `id_token`, return app token | ❌   | 200         |
+| POST   | `logout/`       | Logout (invalidate token)                            | ✅   | 204         |
+| GET    | `me/`           | Alias detail user aktif                              | ✅   | 200         |
 
 ### Reports CRUD (`/api/v1/reports/`)
 
-| Method | Endpoint | Deskripsi | Auth | Query Params |
-|--------|----------|-----------|------|--------------|
-| GET | `` | List semua report dengan filter | ✅ | `status`, `location`, `q` |
-| POST | `` | Create report baru | ✅ | - |
-| GET | `{report_id}/` | Detail report spesifik | ✅ | - |
-| PUT | `{report_id}/` | Update seluruh report (hanya owner) | ✅ | - |
-| PATCH | `{report_id}/` | Update sebagian report (hanya owner) | ✅ | - |
-| DELETE | `{report_id}/` | Delete report (hanya owner) | ✅ | - |
+| Method | Endpoint       | Deskripsi                            | Auth | Query Params              |
+| ------ | -------------- | ------------------------------------ | ---- | ------------------------- |
+| GET    | ``             | List semua report dengan filter      | ✅   | `status`, `location`, `q` |
+| POST   | ``             | Create report baru                   | ✅   | -                         |
+| GET    | `{report_id}/` | Detail report spesifik               | ✅   | -                         |
+| PUT    | `{report_id}/` | Update seluruh report (hanya owner)  | ✅   | -                         |
+| PATCH  | `{report_id}/` | Update sebagian report (hanya owner) | ✅   | -                         |
+| DELETE | `{report_id}/` | Delete report (hanya owner)          | ✅   | -                         |
 
 ### Chats (`/api/v1/chats/`)
 
-| Method | Endpoint | Deskripsi | Auth | Status Code |
-|--------|----------|-----------|------|-------------|
-| POST | `reports/{report_id}/rooms/` | Create atau dapatkan chat room untuk report | ✅ | 201/200 |
-| GET | `rooms/{chatroom_id}/messages/` | Get messages (polling) | ✅ | 200 |
-| POST | `rooms/{chatroom_id}/messages/` | Send message ke chat room | ✅ | 201 |
+| Method | Endpoint                        | Deskripsi                                   | Auth | Status Code |
+| ------ | ------------------------------- | ------------------------------------------- | ---- | ----------- |
+| POST   | `reports/{report_id}/rooms/`    | Create atau dapatkan chat room untuk report | ✅   | 201/200     |
+| GET    | `rooms/{chatroom_id}/messages/` | Get messages (polling)                      | ✅   | 200         |
+| POST   | `rooms/{chatroom_id}/messages/` | Send message ke chat room                   | ✅   | 201         |
 
 ---
 
@@ -148,13 +152,14 @@ Semua endpoint API tersedia di `/api/v1/`. Berikut adalah daftar lengkap endpoin
 
 ### Reports List (`GET /api/v1/reports/`)
 
-| Parameter | Tipe | Deskripsi |
-|-----------|------|-----------|
-| `status` | string | Filter by status: `LOST`, `FOUND`, `CLAIMED` |
-| `location` | string | Filter by location (exact match) |
-| `q` | string | Search di title dan description |
+| Parameter  | Tipe   | Deskripsi                                    |
+| ---------- | ------ | -------------------------------------------- |
+| `status`   | string | Filter by status: `LOST`, `FOUND`, `CLAIMED` |
+| `location` | string | Filter by location (exact match)             |
+| `q`        | string | Search di title dan description              |
 
 **Contoh:**
+
 ```
 GET /api/v1/reports/?status=LOST&location=Kantin
 GET /api/v1/reports/?q=laptop&status=LOST
@@ -167,6 +172,7 @@ GET /api/v1/reports/?q=laptop&status=LOST
 ### Success Response
 
 **Google Login (mobile token exchange):**
+
 ```json
 {
   "token": "a1b2c3d4e5f6g7h8...",
@@ -180,6 +186,7 @@ GET /api/v1/reports/?q=laptop&status=LOST
 ```
 
 **Reports List:**
+
 ```json
 [
   {
@@ -189,29 +196,31 @@ GET /api/v1/reports/?q=laptop&status=LOST
     "location": "Kantin",
     "status": "LOST",
     "image": null,
-    "user": {"id": 1, "email": "user@umkt.ac.id", "name": "John Doe"},
+    "user": { "id": 1, "email": "user@umkt.ac.id", "name": "John Doe" },
     "created_at": "2026-05-19T12:00:00Z"
   }
 ]
 ```
 
 **Chat Room:**
+
 ```json
 {
   "id": 1,
   "report": 1,
-  "user1": {"id": 1, "email": "user1@umkt.ac.id"},
-  "user2": {"id": 2, "email": "user2@umkt.ac.id"},
+  "user1": { "id": 1, "email": "user1@umkt.ac.id" },
+  "user2": { "id": 2, "email": "user2@umkt.ac.id" },
   "created_at": "2026-05-19T12:00:00Z"
 }
 ```
 
 **Message:**
+
 ```json
 {
   "id": 1,
   "chatroom": 1,
-  "sender": {"id": 1, "email": "user@umkt.ac.id"},
+  "sender": { "id": 1, "email": "user@umkt.ac.id" },
   "message": "Apakah laptop sudah ketemu?",
   "created_at": "2026-05-19T12:05:00Z"
 }
@@ -226,11 +235,10 @@ GET /api/v1/reports/?q=laptop&status=LOST
 ```
 
 **Contoh error:**
+
 ```json
 {
-  "detail": [
-    "email: Email harus menggunakan domain @umkt.ac.id"
-  ]
+  "detail": ["email: Email harus menggunakan domain @umkt.ac.id"]
 }
 ```
 
@@ -239,16 +247,19 @@ GET /api/v1/reports/?q=laptop&status=LOST
 ## Business Rules
 
 ### Chat Expiration
+
 - **0-2 hari**: Bisa kirim & baca pesan
 - **2-7 hari**: Hanya bisa baca (readonly)
 - **>7 hari**: Chat otomatis dihapus
 
 ### Ownership & Access
+
 - User hanya bisa **edit/delete** laporan miliknya
 - Chat hanya bisa diakses oleh **2 participant** terkait
 - Hanya user yang membuat laporan bisa **menerima chat**
 
 ### Email Validation
+
 - Hanya email domain `@umkt.ac.id` yang diterima
 - Validasi dilakukan dari claim Google OAuth (`email_verified`, `hd`, dan suffix email)
 - Format: `nama@umkt.ac.id`
@@ -258,6 +269,7 @@ GET /api/v1/reports/?q=laptop&status=LOST
 ## Testing dengan cURL
 
 ### 1. Google Login (Mobile)
+
 ```bash
 curl -X POST http://localhost:8000/api/v1/users/google/login/ \
   -H "Content-Type: application/json" \
@@ -267,12 +279,14 @@ curl -X POST http://localhost:8000/api/v1/users/google/login/ \
 ```
 
 ### 2. Get Current User (dengan token)
+
 ```bash
 curl -X GET http://localhost:8000/api/v1/users/me/ \
   -H "Authorization: Token abc123..."
 ```
 
 ### 3. List Reports
+
 ```bash
 # Semua reports
 curl -X GET http://localhost:8000/api/v1/reports/ \
@@ -292,6 +306,7 @@ curl -X GET "http://localhost:8000/api/v1/reports/?status=LOST&location=Kantin&q
 ```
 
 ### 4. Create Report
+
 ```bash
 curl -X POST http://localhost:8000/api/v1/reports/ \
   -H "Authorization: Token abc123..." \
@@ -305,12 +320,14 @@ curl -X POST http://localhost:8000/api/v1/reports/ \
 ```
 
 ### 5. Get Report Detail
+
 ```bash
 curl -X GET http://localhost:8000/api/v1/reports/1/ \
   -H "Authorization: Token abc123..."
 ```
 
 ### 6. Update Report
+
 ```bash
 # Full update (PUT)
 curl -X PUT http://localhost:8000/api/v1/reports/1/ \
@@ -331,12 +348,14 @@ curl -X PATCH http://localhost:8000/api/v1/reports/1/ \
 ```
 
 ### 7. Delete Report
+
 ```bash
 curl -X DELETE http://localhost:8000/api/v1/reports/1/ \
   -H "Authorization: Token abc123..."
 ```
 
 ### 8. Create Chat Room
+
 ```bash
 curl -X POST http://localhost:8000/api/v1/chats/reports/1/rooms/ \
   -H "Authorization: Token abc123..." \
@@ -345,12 +364,14 @@ curl -X POST http://localhost:8000/api/v1/chats/reports/1/rooms/ \
 ```
 
 ### 9. Get Chat Messages (Polling)
+
 ```bash
 curl -X GET http://localhost:8000/api/v1/chats/rooms/1/messages/ \
   -H "Authorization: Token abc123..."
 ```
 
 ### 10. Send Message
+
 ```bash
 curl -X POST http://localhost:8000/api/v1/chats/rooms/1/messages/ \
   -H "Authorization: Token abc123..." \
@@ -359,6 +380,7 @@ curl -X POST http://localhost:8000/api/v1/chats/rooms/1/messages/ \
 ```
 
 ### 11. Logout
+
 ```bash
 curl -X POST http://localhost:8000/api/v1/users/logout/ \
   -H "Authorization: Token abc123..."
@@ -369,13 +391,13 @@ curl -X POST http://localhost:8000/api/v1/users/logout/ \
 
 ## Status Codes
 
-| Code | Arti | Contoh |
-|------|------|--------|
-| 200 | OK | Google login berhasil, get data berhasil |
-| 201 | Created | Create report, send message |
-| 204 | No Content | Logout, delete berhasil |
-| 400 | Bad Request | Validasi gagal (email format salah) |
-| 401 | Unauthorized | Token tidak valid/expired |
-| 403 | Forbidden | User bukan owner (edit/delete bukan milik) |
-| 404 | Not Found | Report/chat tidak ditemukan |
-| 500 | Server Error | Error di server |
+| Code | Arti         | Contoh                                     |
+| ---- | ------------ | ------------------------------------------ |
+| 200  | OK           | Google login berhasil, get data berhasil   |
+| 201  | Created      | Create report, send message                |
+| 204  | No Content   | Logout, delete berhasil                    |
+| 400  | Bad Request  | Validasi gagal (email format salah)        |
+| 401  | Unauthorized | Token tidak valid/expired                  |
+| 403  | Forbidden    | User bukan owner (edit/delete bukan milik) |
+| 404  | Not Found    | Report/chat tidak ditemukan                |
+| 500  | Server Error | Error di server                            |
