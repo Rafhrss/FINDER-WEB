@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Syarat Layanan & Kebijakan Privasi{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-base-100 p-6 md:p-8 rounded-3xl shadow-sm border border-base-200">
+    <!-- Header Title -->
+    <div class="flex items-center gap-4 mb-8 pb-6 border-b border-base-300">
+        <div class="w-12 h-12 rounded-xl bg-base-200 flex items-center justify-center border border-base-300 shadow-sm shrink-0">
+            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+        </div>
+        <div>
+            <h2 class="text-2xl font-bold text-primary">Syarat dan Ketentuan Penggunaan Layanan</h2>
+            <span class="text-sm text-base-content/60">Pembaruan Terakhir: April 2026</span>
+        </div>
+    </div>
+
+    <!-- Teks Area -->
+    <div class="prose prose-sm md:prose-base prose-p:text-base-content/80 prose-headings:text-base-content max-w-none">
+        
+        <p class="leading-loose mb-8">
+            Selamat datang di UMKT Finder. Aplikasi ini merupakan platform solusi pelaporan barang hilang dan temuan terpadu yang disediakan khusus untuk civitas akademika Universitas Muhammadiyah Kalimantan Timur. Dengan mengakses dan menggunakan layanan ini, Anda setuju untuk terikat oleh Syarat dan Ketentuan berikut.
+        </p>
+
+        <h3 class="text-lg font-bold mb-3">1. Definisi & Akses Layanan</h3>
+        <p class="leading-loose mb-8">
+            Akses ke aplikasi UMKT Finder dibatasi hanya untuk mahasiswa, dosen, dan staf aktif. Setiap pengguna diwajibkan melakukan proses otentikasi melalui Single Sign-On (SSO) menggunakan email resmi domain kampus (<span class="font-medium text-base-content">@umkt.ac.id</span>). Kami tidak menerima pendaftaran dari pihak luar demi menjaga keamanan dan validitas data laporan di dalam area kampus.
+        </p>
+
+        <h3 class="text-lg font-bold mb-3">2. Kewajiban & Perilaku Pengguna</h3>
+        <p class="leading-loose mb-8">
+            Pengguna bertanggung jawab penuh atas segala informasi, deskripsi, dan foto yang diunggah ke dalam sistem. Pengguna dilarang keras:<br><br>
+            <span class="block ml-4 border-l-2 border-base-300 pl-4 text-base-content/70">
+                a. Mengunggah laporan palsu (spam) atau lelucon yang dapat mengganggu ketertiban.<br>
+                b. Mengunggah gambar yang mengandung unsur SARA, pornografi, atau melanggar hukum.<br>
+                c. Mengklaim barang temuan yang bukan milik sahnya.<br>
+                d. Menyalahgunakan fitur pesan (chat) untuk tindakan penipuan atau pemerasan.
+            </span>
+        </p>
+
+        <h3 class="text-lg font-bold mb-3">3. Privasi & Keamanan Data</h3>
+        <p class="leading-loose mb-8">
+            Kami sangat menghargai privasi Anda. Data profil Anda (Nama dan Email) hanya akan digunakan untuk keperluan operasional aplikasi UMKT Finder, seperti menampilkan identitas pelapor dan memfasilitasi komunikasi dalam fitur Chat. Sistem kami mengenkripsi pertukaran pesan untuk meminimalisir risiko penyadapan data. Namun, pengguna dihimbau untuk tidak membagikan informasi rahasia seperti kata sandi atau nomor rekening di dalam ruang obrolan.
+        </p>
+
+        <h3 class="text-lg font-bold mb-3">4. Batasan Tanggung Jawab</h3>
+        <p class="leading-loose mb-8 mb-0">
+            Sistem UMKT Finder bertindak semata-mata sebagai platform perantara informasi antara pihak yang kehilangan dan pihak yang menemukan. Kami <span class="text-error font-medium">tidak bertanggung jawab</span> atas kerusakan, kehilangan fisik, atau perselisihan yang terjadi saat serah terima barang secara langsung. Kami menyarankan agar serah terima dilakukan di area publik kampus atau dititipkan pada pos keamanan terdekat.
+        </p>
+    </div>
+</div>
+{% endblock %}

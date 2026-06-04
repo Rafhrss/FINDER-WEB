@@ -27,7 +27,7 @@
         </div>
 
         <!-- Right Column (Login Form) -->
-        <div class="w-full lg:w-1/2 bg-[#050A10] flex flex-col justify-center items-center p-8 md:p-16 min-h-screen lg:min-h-0">
+        <div class="w-full lg:w-1/2 bg-[#050A10] flex flex-col justify-center items-center p-8 md:p-16 min-h-screen lg:min-h-0 relative">
             <div class="w-full max-w-sm flex flex-col items-center">
                 <!-- Mobile Branding (Visible only on small screens) -->
                 <div class="flex lg:hidden flex-col items-center text-center mb-10">
@@ -75,6 +75,13 @@
                     Wajib menggunakan akun resmi kampus 
                     <span class="text-gray-300 font-semibold">(@umkt.ac.id)</span> 
                     untuk proses validasi.
+                </p>
+            </div>
+
+            <div class="absolute bottom-8 left-0 w-full px-8 text-center">
+                <p class="text-xs text-gray-500">
+                    Dengan melanjutkan, Anda menyetujui 
+                    <a href="{% url 'web:terms' %}" class="text-gray-500 text-sm underline">Syarat Layanan dan Kebijakan Privacy</a> 
                 </p>
             </div>
         </div>
