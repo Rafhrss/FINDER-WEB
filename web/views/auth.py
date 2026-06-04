@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.shortcuts import redirect, render
 
 
-
 @login_required
 def logout_view(request):
     if request.method == "POST":
