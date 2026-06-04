@@ -17,7 +17,7 @@ class Report(models.Model):
     title = models.CharField(max_length=180)
     description = models.TextField()
     location = models.CharField(max_length=255)
-    image = models.ImageField(upload_to="reports/", blank=True, null=True)
+    image = models.URLField(max_length=500, blank=True, null=True)
     status = models.CharField(
         max_length=10,
         choices=ReportStatus.choices,

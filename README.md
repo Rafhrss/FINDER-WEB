@@ -52,13 +52,13 @@ python manage.py runserver
 **For Linux/macOS:**
 
 ```bash
-cd static/css && curl -sL daisyui.com/fast | bash
+cd static/linux/css && curl -sL daisyui.com/fast | bash
 ```
 
 **For Windows (PowerShell):**
 
 ```bash
-cd static/css ; powershell -c "irm daisyui.com/fast.ps1 | iex"
+cd static/win/css ; powershell -c "irm daisyui.com/fast.ps1 | iex"
 ```
 
 This command will download the tailwindcss binary and setup DaisyUI automatically.
