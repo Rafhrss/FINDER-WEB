@@ -1,14 +1,52 @@
+from urllib.parse import urlencode
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
 from apps.reports.models import Report, ReportStatus
-from apps.reports.services import create_report
+from apps.reports.services import create_report, update_report
 
 
 def report_detail_view(request, report_id: int):
     report = get_object_or_404(Report.objects.select_related("user"), id=report_id)
-    return render(request, "web/report_detail.html", {"report": report})
+
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            login_url = f"{reverse('web:login')}?{urlencode({'next': request.path})}"
+            return redirect(login_url)
+
+        status = request.POST.get("status")
+        if not status:
+            messages.error(request, "Status laporan tidak boleh kosong.")
+            return redirect("web:report-detail", report_id=report_id)
+
+        valid_statuses = {value for value, _ in ReportStatus.choices}
+        if status not in valid_statuses:
+            messages.error(request, "Status laporan tidak valid.")
+            return redirect("web:report-detail", report_id=report_id)
+
+        try:
+            update_report(report=report, actor=request.user, status=status)
+        except ValidationError as exc:
+            messages.error(request, " ".join(exc.messages))
+        except PermissionDenied as exc:
+            messages.error(request, str(exc))
+        else:
+            messages.success(request, "Status laporan berhasil diperbarui.")
+
+        return redirect("web:report-detail", report_id=report_id)
+
+    return render(
+        request,
+        "web/report_detail.html",
+        {
+            "report": report,
+            "status_choices": ReportStatus.choices,
+        },
+    )
 
 
 @login_required

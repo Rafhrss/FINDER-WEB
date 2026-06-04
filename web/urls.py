@@ -9,6 +9,7 @@ from web.views import (
     report_create_view,
     report_detail_view,
     search_view,
+    chat_list_view,
 )
 
 urlpatterns = [
@@ -18,6 +19,7 @@ urlpatterns = [
     path("reports/create/", report_create_view, name="report-create"),
     path("reports/<int:report_id>/", report_detail_view, name="report-detail"),
     path("reports/<int:report_id>/chat/", open_chatroom_view, name="open-chat"),
+    path("chats/", chat_list_view, name="chat-list"),
     path("profile/", profile_view, name="profile"),
     path("chats/<int:chatroom_id>/", chat_room_view, name="chat-room"),
 ]

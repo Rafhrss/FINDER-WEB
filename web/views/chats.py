@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 
-from apps.chats.selectors import get_chatroom_by_id
+from apps.chats.selectors import get_chatroom_by_id, list_chatrooms_for_user
 from apps.chats.services import (
     cleanup_expired_chatrooms,
     create_chatroom,
@@ -23,6 +23,13 @@ def open_chatroom_view(request, report_id: int):
         messages.error(request, " ".join(exc.messages))
         return redirect("web:report-detail", report_id=report_id)
     return redirect("web:chat-room", chatroom_id=chatroom.id)
+
+
+@login_required
+def chat_list_view(request):
+    cleanup_expired_chatrooms()
+    chatrooms = list_chatrooms_for_user(user=request.user)
+    return render(request, "web/chat_list.html", {"chatrooms": chatrooms})
 
 
 @login_required

@@ -66,6 +66,28 @@
                 <span class="text-sm text-base-content/60 font-medium">Diunggah {{ report.created_at|date:"d F Y" }}</span>
             </div>
 
+            {% if request.user.is_authenticated and request.user.id == report.user_id %}
+                <div class="mb-8">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="badge badge-primary text-primary-content uppercase font-semibold text-xs tracking-wide px-3 py-2 rounded-md">Pemilik Laporan</span>
+                        <span class="text-xs text-base-content font-medium">Anda dapat memperbarui status laporan.</span>
+                    </div>
+                    <form method="post" class="flex flex-wrap items-center gap-3">
+                        {% csrf_token %}
+                        <select name="status" class="select select-bordered bg-base-200 border-base-300 rounded-xl">
+                            {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if report.status == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary rounded-xl px-6 h-12 font-semibold">
+                            Perbarui Status
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+
             <!-- Title -->
             <h1 class="text-4xl lg:text-5xl font-bold text-base-content leading-tight mb-10">{{ report.title }}</h1>
 
