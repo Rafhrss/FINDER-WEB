@@ -65,10 +65,16 @@ This command will download the tailwindcss binary and setup DaisyUI automaticall
 
 ### Development: Run Django + Tailwind together
 
-Use Honcho to run both Django server and Tailwind watcher in parallel:
+Gunakan npm untuk menjalankan Django server dan Tailwind watcher secara bersamaan:
 
+**Untuk Windows:**
 ```bash
-python -m honcho start
+npm run start:win
+```
+
+**Untuk Linux/macOS:**
+```bash
+npm run start:linux
 ```
 
 This will start:

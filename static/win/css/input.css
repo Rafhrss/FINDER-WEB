@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@source not "./tailwindcss";
+@source not "./daisyui{,*}.mjs";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+@plugin "./daisyui.mjs";
+@plugin "./daisyui-theme.mjs" {
+  name: "finder";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #060e17;
+  --color-base-200: #0b1522;
+  --color-base-300: #111e2c;
+  --color-base-content: #e6f1ff;
+  --color-primary: #0af3b9;
+  --color-primary-content: #02130d;
+  --color-secondary: #1d9bf0;
+  --color-secondary-content: #061624;
+  --color-accent: #f59e0b;
+  --color-accent-content: #231600;
+  --color-neutral: #0f172a;
+  --color-neutral-content: #e2e8f0;
+  --color-info: #38bdf8;
+  --color-info-content: #06202d;
+  --color-success: #22c55e;
+  --color-success-content: #06200f;
+  --color-warning: #fbbf24;
+  --color-warning-content: #231600;
+  --color-error: #ef4444;
+  --color-error-content: #220606;
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@theme {
+  --color-umkt-navy: #0e182a;
+  --color-umkt-black: #090d14;
+  --color-umkt-green: #1df29f;
+  --color-umkt-btn-bg: #121b2d;
+  --color-umkt-btn-border: #222f45;
+}
+
+@theme {
+  --background-image-umkt-glow: radial-gradient(circle at top left, rgba(29, 242, 159, 0.1), transparent 50%), radial-gradient(circle at bottom right, rgba(5, 10, 16, 0.8), transparent 50%);
+}
+
+@theme {
+  --color-brand-bg: #0B111A;
+  --color-brand-surface: #151E2B;
+  --color-brand-border: #232D3B;
+  --color-brand-primary: #0AF3B9;
+  --color-brand-primary-hover: #08D5A2;
+  --color-brand-danger: #EF4444;
+  --color-brand-warning: #F97316;
+  --color-brand-text: #F3F4F6;
+  --color-brand-text-muted: #9CA3AF;
+
+  --color-app-bg: #0B111A;
+  --color-app-surface: #151E2B;
+  --color-app-border: #232D3B;
+  --color-app-primary: #0AF3B9;
+  --color-app-text: #F8FAFC;
+  --color-app-muted: #94A3B8;
+  --color-app-danger: #EF4444;
+  --color-app-warning: #F97316;
+}

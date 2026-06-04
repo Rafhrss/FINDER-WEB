@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "start:win": "honcho -f Procfile.windows start",
+    "start:linux": "honcho -f Procfile.linux start"
+  },
   "dependencies": {
     "@tailwindcss/cli": "^4.3.0",
     "tailwindcss": "^4.3.0"
