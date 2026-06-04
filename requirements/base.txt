@@ -31,7 +31,7 @@ python-dotenv==1.2.2
 python-slugify==8.0.4
 PyYAML==6.0.3
 requests==2.34.2
-rich==15.0.0
+rich<15.0.0
 six==1.17.0
 sqlparse==0.5.5
 text-unidecode==1.3

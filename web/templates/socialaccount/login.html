@@ -33,7 +33,7 @@
         </div>
 
         <!-- Right Column (Login Form) -->
-        <div class="w-full lg:w-1/2 bg-[#050A10] flex flex-col justify-center items-center p-8 sm:p-12 min-h-screen lg:min-h-0">
+        <div class="w-full lg:w-1/2 bg-[#050A10] flex flex-col justify-center items-center p-8 sm:p-12 min-h-screen lg:min-h-0 relative">
             <div class="w-full max-w-md">
                 <!-- Mobile Branding (Visible only on small screens) -->
                 <div class="flex lg:hidden flex-col items-center text-center mb-10">
@@ -77,21 +77,22 @@
                     <div class="grow h-px bg-[#1f2937]"></div>
                 </div>
 
-                <p class="text-center text-xs text-gray-500 leading-relaxed px-4 mb-8">
+                <p class="text-center text-xs text-gray-500 leading-relaxed px-4 mb-4">
                     Wajib menggunakan akun resmi kampus 
                     <span class="text-gray-300 font-semibold">(@umkt.ac.id)</span> 
                     untuk proses validasi.
                 </p>
-
                 <div class="mt-4 text-center">
                     <a href="{% url 'account_login' %}" class="text-sm text-slate-500 hover:text-slate-300 transition-colors">Batal</a>
                 </div>
+            </div>
 
-                <div class="mt-12 text-center text-sm">
-                    <a href="#" class="text-slate-500 hover:text-slate-300 transition-colors mx-2">Bantuan</a>
-                    <span class="text-slate-700">&bull;</span>
-                    <a href="#" class="text-slate-500 hover:text-slate-300 transition-colors mx-2">Kebijakan Privasi</a>
-                </div>
+            <div class="absolute bottom-8 left-0 w-full px-8 text-center">
+                <p class="text-xs text-gray-500">
+                    Dengan melanjutkan, Anda menyetujui 
+                    <a href="{% url 'web:terms' %}" class="text-white font-bold text-sm hover:underline">Syarat Layanan</a> 
+                    dan <a href="#" class="underline hover:text-gray-300">Kebijakan Privacy</a>
+                </p>
             </div>
         </div>
     </div>

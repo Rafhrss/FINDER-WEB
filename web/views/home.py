@@ -10,3 +10,7 @@ def home_view(request):
         "reports": reports,
     }
     return render(request, "web/home.html", context)
+
+
+def terms_of_service_view(request):
+    return render(request, "terms_of_service.html")
