@@ -5,7 +5,7 @@ from apps.reports.selectors import list_reports
 
 
 def home_view(request):
-    reports = list_reports(status=ReportStatus.LOST)[:6]
+    reports = list_reports()[:6]
     context = {
         "reports": reports,
     }

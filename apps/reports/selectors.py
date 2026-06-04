@@ -19,7 +19,7 @@ def list_reports(
             Q(location__icontains=keyword) |
             Q(description__icontains=keyword)
         )
-    return queryset
+    return queryset.order_by("-created_at")
 
 
 def get_report_by_id(report_id: int) -> Report | None:
