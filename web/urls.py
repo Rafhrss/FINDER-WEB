@@ -10,6 +10,8 @@ from web.views import (
     report_detail_view,
     search_view,
     chat_list_view,
+    my_reports_view,
+    report_delete_view,
 )
 
 urlpatterns = [
@@ -19,7 +21,9 @@ urlpatterns = [
     path("reports/create/", report_create_view, name="report-create"),
     path("reports/<int:report_id>/", report_detail_view, name="report-detail"),
     path("reports/<int:report_id>/chat/", open_chatroom_view, name="open-chat"),
+    path("reports/<int:report_id>/delete/", report_delete_view, name="report-delete"),
     path("chats/", chat_list_view, name="chat-list"),
     path("profile/", profile_view, name="profile"),
+    path("my-reports/", my_reports_view, name="my-reports"),
     path("chats/<int:chatroom_id>/", chat_room_view, name="chat-room"),
 ]

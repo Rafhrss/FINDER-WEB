@@ -11,7 +11,7 @@
                     <li><a href="{% url 'web:home' %}" class="{% if request.resolver_match.url_name == 'home' %}text-primary font-medium{% endif %}">Beranda</a></li>
                     <li><a href="{% url 'web:search' %}" class="{% if request.resolver_match.url_name == 'search' %}text-primary font-medium{% endif %}">Cari Barang</a></li>
                     <li><a href="{% url 'web:report-create' %}" class="{% if request.resolver_match.url_name == 'report-create' %}text-primary font-medium{% endif %}">Tambah Laporan</a></li>
-                    <li><a href="#">Laporanku</a></li>
+                    <li><a href="{% url 'web:my-reports' %}" class="{% if request.resolver_match.url_name == 'my-reports' %}text-primary font-medium{% endif %}">Laporanku</a></li>
                 </ul>
             </div>
             <a class="btn btn-ghost text-xl tracking-wider gap-2 font-bold" href="{% url 'web:home' %}">
@@ -25,9 +25,9 @@
     <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal px-1 text-sm text-base-content/70">
             <li><a href="{% url 'web:home' %}" class="{% if request.resolver_match.url_name == 'home' %}text-primary font-medium{% endif %}">Beranda</a></li>
-            <li><a href="#">Cari Barang</a></li>
+            <li><a href="{% url 'web:search' %}" class="{% if request.resolver_match.url_name == 'search' %}text-primary font-medium{% endif %}">Cari Barang</a></li>
             <li><a href="{% url 'web:report-create' %}" class="{% if request.resolver_match.url_name == 'report-create' %}text-primary font-medium{% endif %}">Tambah Laporan</a></li>
-            <li><a href="#">Laporanku</a></li>
+            <li><a href="{% url 'web:my-reports' %}" class="{% if request.resolver_match.url_name == 'my-reports' %}text-primary font-medium{% endif %}">Laporanku</a></li>
         </ul>
     </div>
     <div class="navbar-end gap-3">
