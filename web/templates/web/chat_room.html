@@ -105,7 +105,7 @@
             <div class="card border border-base-300 bg-base-200/70 shadow-sm">
                 <figure class="aspect-video w-full overflow-hidden rounded-t-2xl bg-base-300/40">
                     {% if chatroom.report.image %}
-                        <img src="{{ chatroom.report.image.url }}" alt="{{ chatroom.report.title }}" class="h-full w-full object-cover">
+                        <img src="{{ chatroom.report.image }}" alt="{{ chatroom.report.title }}" class="h-full w-full object-cover">
                     {% else %}
                         <div class="flex h-full w-full items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-base-content/20" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

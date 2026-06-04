@@ -131,6 +131,43 @@
 
 <!-- Simple Script for Image Preview -->
 <script>
+    function showToast(message) {
+        // Create toast container if it doesn't exist
+        let toastContainer = document.getElementById('daisy-toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'daisy-toast-container';
+            toastContainer.className = 'toast toast-bottom toast-end z-50 mt-16';
+            document.body.appendChild(toastContainer);
+        }
+
+        // Create alert element
+        const alertEl = document.createElement('div');
+        alertEl.className = 'alert alert-error shadow-lg text-white animate-bounce';
+        
+        // Icon SVG
+        const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+        
+        alertEl.innerHTML = `
+            ${iconSvg}
+            <span class="font-semibold">${message}</span>
+        `;
+        
+        toastContainer.appendChild(alertEl);
+
+        // Remove toast after 3.5 seconds
+        setTimeout(() => {
+            alertEl.classList.replace('animate-bounce', 'opacity-0');
+            alertEl.classList.add('transition-opacity', 'duration-500');
+            setTimeout(() => {
+                alertEl.remove();
+                if (toastContainer.children.length === 0) {
+                    toastContainer.remove();
+                }
+            }, 500);
+        }, 3500);
+    }
+
     function previewImage(event) {
         const input = event.target;
         const previewContainer = document.getElementById('imagePreviewContainer');
@@ -138,13 +175,30 @@
         const uploadBox = document.getElementById('uploadBox');
         
         if (input.files && input.files[0]) {
+            const file = input.files[0];
+            
+            // Validasi Ukuran Maksimal 5MB
+            if (file.size > 5 * 1024 * 1024) {
+                showToast("Ukuran file terlalu besar! Maksimal 5MB.");
+                clearImage();
+                return;
+            }
+            
+            // Validasi Format JPG/PNG/JPEG
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                showToast("Format tidak didukung! Harap unggah gambar JPG atau PNG.");
+                clearImage();
+                return;
+            }
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 previewImage.src = e.target.result;
                 previewContainer.classList.remove('hidden');
                 uploadBox.classList.add('hidden');
             }
-            reader.readAsDataURL(input.files[0]);
+            reader.readAsDataURL(file);
         }
     }
     
@@ -159,3 +213,4 @@
     }
 </script>
 {% endblock %}
+

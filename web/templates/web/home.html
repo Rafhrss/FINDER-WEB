@@ -15,7 +15,7 @@
                     
                     <!-- Backgrounds -->
                     {% if report.image %}
-                        <img src="{{ report.image.url }}" alt="{{ report.title }}" class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay">
+                        <img src="{{ report.image }}" alt="{{ report.title }}" class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay">
                     {% endif %}
                     <div class="absolute inset-0 bg-linear-to-br from-base-300/90 to-base-200/80 pointer-events-none"></div>
                     <div class="absolute right-0 top-0 bottom-0 w-1/2 bg-linear-to-l from-primary/10 to-transparent pointer-events-none"></div>

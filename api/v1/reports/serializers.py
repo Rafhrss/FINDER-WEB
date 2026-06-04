@@ -36,3 +36,13 @@ class ReportWriteSerializer(serializers.Serializer):
     location = serializers.CharField(max_length=255)
     image = serializers.ImageField(required=False, allow_null=True)
     status = serializers.ChoiceField(choices=ReportStatus.choices, required=False)
+
+    def validate_image(self, value):
+        if not value:
+            return value
+        if value.size > 5 * 1024 * 1024:
+            raise serializers.ValidationError("Ukuran file gambar tidak boleh melebihi 5MB.")
+        if value.content_type not in ["image/jpeg", "image/jpg", "image/png"]:
+            raise serializers.ValidationError("Format gambar harus berupa JPG, JPEG, atau PNG.")
+        return value
+
