@@ -6,5 +6,6 @@ node_modules/
 staticfiles/
 media/
 .env
+.env.example
 static/win/css/tailwindcss.exe
 static/linux/css/tailwindcss

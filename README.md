@@ -7,12 +7,6 @@ Platform pencarian barang hilang kampus dengan arsitektur clean:
 - **Business logic**: service + selector (`apps/`)
 - **Settings modular**: `config/settings/{base,development,production}.py`
 
-```bash
-akun admin Rafa
-admin@umkt.ac.id
-Name: admin
-Paswd : admin1234
-```
 
 ## Struktur Inti
 
