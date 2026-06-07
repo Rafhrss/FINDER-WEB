@@ -12,7 +12,7 @@ from apps.reports.selectors import get_reports_by_owner
 from apps.reports.services import create_report, update_report, delete_report
 
 
-def report_detail_view(request, report_id: int):
+def report_detail_view(request, report_id):
     report = get_object_or_404(Report.objects.select_related("user"), id=report_id)
 
     if request.method == "POST":
@@ -115,7 +115,7 @@ def my_reports_view(request):
 
 
 @login_required
-def report_delete_view(request, report_id: int):
+def report_delete_view(request, report_id):
     if request.method == "POST":
         report = get_object_or_404(Report, id=report_id)
         try:

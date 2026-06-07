@@ -4,7 +4,7 @@ from apps.reports.models import Report, ReportStatus
 
 
 class ReportOwnerSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+    id = serializers.UUIDField()
     email = serializers.EmailField()
     name = serializers.CharField()
 
@@ -27,6 +27,9 @@ class ReportSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "user", "created_at")
 
     def get_user(self, obj: Report):
+        request = self.context.get("request")
+        if request and request.user.is_anonymous:
+            return None
         return ReportOwnerSerializer(obj.user).data
 
 
