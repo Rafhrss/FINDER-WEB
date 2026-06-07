@@ -4,7 +4,7 @@ from apps.chats.models import ChatRoom, Message
 
 
 class ChatParticipantSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+    id = serializers.UUIDField()
     email = serializers.EmailField()
     name = serializers.CharField()
 

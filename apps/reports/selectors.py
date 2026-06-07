@@ -22,7 +22,7 @@ def list_reports(
     return queryset.order_by("-created_at")
 
 
-def get_report_by_id(report_id: int) -> Report | None:
+def get_report_by_id(report_id) -> Report | None:
     return Report.objects.select_related("user").filter(id=report_id).first()
 
 

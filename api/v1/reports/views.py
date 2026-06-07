@@ -2,7 +2,7 @@ from django.core.exceptions import PermissionDenied as DjangoPermissionDenied
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import status
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -12,7 +12,7 @@ from apps.reports.services import create_report, delete_report, update_report
 
 
 class ReportListCreateAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
         queryset = list_reports(
@@ -34,19 +34,19 @@ class ReportListCreateAPIView(APIView):
 
 
 class ReportDetailAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def _get_report(self, report_id: int):
+    def _get_report(self, report_id):
         report = get_report_by_id(report_id)
         if not report:
             raise NotFound("Laporan tidak ditemukan.")
         return report
 
-    def get(self, request, report_id: int):
+    def get(self, request, report_id):
         report = self._get_report(report_id)
         return Response(ReportSerializer(report).data, status=status.HTTP_200_OK)
 
-    def put(self, request, report_id: int):
+    def put(self, request, report_id):
         report = self._get_report(report_id)
         serializer = ReportWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -62,7 +62,7 @@ class ReportDetailAPIView(APIView):
             raise PermissionDenied(str(exc)) from exc
         return Response(ReportSerializer(updated_report).data, status=status.HTTP_200_OK)
 
-    def patch(self, request, report_id: int):
+    def patch(self, request, report_id):
         report = self._get_report(report_id)
         serializer = ReportWriteSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
@@ -78,7 +78,7 @@ class ReportDetailAPIView(APIView):
             raise PermissionDenied(str(exc)) from exc
         return Response(ReportSerializer(updated_report).data, status=status.HTTP_200_OK)
 
-    def delete(self, request, report_id: int):
+    def delete(self, request, report_id):
         report = self._get_report(report_id)
         try:
             delete_report(report=report, actor=request.user)

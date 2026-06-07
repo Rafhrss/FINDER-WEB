@@ -15,7 +15,7 @@ from apps.reports.models import Report
 
 
 @login_required
-def open_chatroom_view(request, report_id: int):
+def open_chatroom_view(request, report_id):
     report = get_object_or_404(Report, id=report_id)
     try:
         chatroom, _ = create_chatroom(report=report, initiator=request.user)

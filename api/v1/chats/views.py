@@ -24,7 +24,7 @@ from apps.reports.selectors import get_report_by_id
 class ChatRoomCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, report_id: int):
+    def post(self, request, report_id):
         report = get_report_by_id(report_id)
         if not report:
             raise NotFound("Laporan tidak ditemukan.")

@@ -4,7 +4,7 @@ from api.v1.chats.views import ChatRoomCreateAPIView, MessageListCreateAPIView
 
 urlpatterns = [
     path(
-        "reports/<int:report_id>/rooms/",
+        "reports/<uuid:report_id>/rooms/",
         ChatRoomCreateAPIView.as_view(),
         name="chatroom-create",
     ),
