@@ -14,8 +14,13 @@ def extract_keywords_with_gemini(query: str) -> dict:
     """
     Extracts search intent and keywords from a natural language query using Gemini.
     """
+    if getattr(settings, "MOCK_AI_SERVICES", False):
+        import time
+        time.sleep(1) # Simulasi loading
+        return {"keywords": query.split()}
+        
     if not getattr(settings, "GEMINI_API_KEY", None):
-        return {"keywords": [query]}
+        return {"keywords": query.split()}
 
     try:
         model = genai.GenerativeModel("gemini-2.5-flash")
@@ -48,14 +53,26 @@ def extract_keywords_with_gemini(query: str) -> dict:
         return result
     except Exception as e:
         logger.error(f"Error extracting keywords with Gemini: {e}")
-        return {"keywords": [query]}
+        return {"keywords": query.split()}
 
 
 def analyze_matches_with_gemini(query: str, reports: list) -> list:
     """
     Analyzes how well database records match the user's natural language query using Gemini.
     """
-    if not reports or not getattr(settings, "GEMINI_API_KEY", None):
+    if not reports:
+        return []
+        
+    if getattr(settings, "MOCK_AI_SERVICES", False):
+        import time
+        import random
+        time.sleep(1.5) # Simulasi loading AI
+        for report in reports:
+            report.match_percentage = random.randint(15, 60)
+            report.justification = "[MOCK MODE] Ini adalah analisis bohongan untuk menghemat kuota API saat development. Karena ini mock, skor selalu rendah (15-60%)."
+        return reports
+        
+    if not getattr(settings, "GEMINI_API_KEY", None):
         return reports
 
     try:
@@ -80,7 +97,13 @@ def analyze_matches_with_gemini(query: str, reports: list) -> list:
         
         Tugas Anda:
         1. Evaluasi seberapa cocok setiap barang dengan deskripsi asli pengguna (berikan match_percentage dari 0 hingga 100).
-        2. Berikan "justification" singkat (maksimal 2 kalimat dalam bahasa Indonesia) mengapa barang ini mungkin cocok atau tidak dengan maksud pencarian pengguna.
+           PANDUAN SKOR STRICT:
+           - 90-100%: Sangat identik (jenis barang, warna, dan ciri-ciri khusus sama persis).
+           - 70-89%: Cukup cocok (jenis barang sama, tapi ada 1 atau 2 detail seperti warna yang kurang spesifik/berbeda).
+           - 40-69%: Kurang cocok (hanya 1 kata yang mirip, atau jenis barang utamanya berbeda sama sekali).
+           - 0-39%: Tidak cocok (salah sasaran).
+           SANGAT PENTING: Jangan pernah memberikan skor di atas 80% jika warna atau jenis barang spesifiknya berbeda!
+        2. Berikan "justification" singkat (maksimal 2 kalimat dalam bahasa Indonesia) yang jujur mengapa ini cocok atau kurang cocok.
         
         Kembalikan hasilnya DALAM FORMAT JSON array persis seperti ini:
         [
