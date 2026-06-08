@@ -182,3 +182,4 @@ SUPABASE_KEY = os.getenv("PUBLIC_SUPABASE_KEY", "")
 
 # Gemini API
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+MOCK_AI_SERVICES = env_bool("MOCK_AI_SERVICES", False)
