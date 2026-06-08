@@ -179,3 +179,6 @@ LOGIN_REDIRECT_URL = "web:home"
 # Supabase
 SUPABASE_URL = os.getenv("PUBLIC_SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("PUBLIC_SUPABASE_KEY", "")
+
+# Gemini API
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
