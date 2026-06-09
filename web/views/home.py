@@ -14,3 +14,6 @@ def home_view(request):
 
 def terms_of_service_view(request):
     return render(request, "terms_of_service.html")
+
+def about_view(request):
+    return render(request, "web/about.html")

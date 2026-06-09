@@ -14,12 +14,14 @@ from web.views import (
     chat_list_view,
     my_reports_view,
     report_delete_view,
+    about_view,
 )
 
 urlpatterns = [
     path("logout/", logout_view, name="logout"),
     path("", home_view, name="home"),
     path("terms/", terms_of_service_view, name="terms"),
+    path("about/", about_view, name="about"),
     path("search/", search_view, name="search"),
     path("search/ai/", ai_search_view, name="ai-search"),
     path("reports/create/", report_create_view, name="report-create"),
@@ -29,5 +31,5 @@ urlpatterns = [
     path("chats/", chat_list_view, name="chat-list"),
     path("profile/", profile_view, name="profile"),
     path("my-reports/", my_reports_view, name="my-reports"),
-    path("chats/<int:chatroom_id>/", chat_room_view, name="chat-room"),
+    path("chats/<uuid:chatroom_id>/", chat_room_view, name="chat-room")
 ]
