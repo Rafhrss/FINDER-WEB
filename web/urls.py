@@ -15,6 +15,7 @@ from web.views import (
     my_reports_view,
     report_delete_view,
     about_view,
+    report_edit_view,
 )
 
 urlpatterns = [
@@ -26,6 +27,7 @@ urlpatterns = [
     path("search/ai/", ai_search_view, name="ai-search"),
     path("reports/create/", report_create_view, name="report-create"),
     path("reports/<uuid:report_id>/", report_detail_view, name="report-detail"),
+    path("reports/<uuid:report_id>/edit/", report_edit_view, name="report-edit"),
     path("reports/<uuid:report_id>/chat/", open_chatroom_view, name="open-chat"),
     path("reports/<uuid:report_id>/delete/", report_delete_view, name="report-delete"),
     path("chats/", chat_list_view, name="chat-list"),

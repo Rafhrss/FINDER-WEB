@@ -108,6 +108,9 @@
                             </div>
                             <div tabindex="0" class="dropdown-content p-3 shadow-2xl bg-brand-surface border border-brand-border rounded-xl w-32 z-50 mt-1">
                                 <div class="flex flex-col gap-2">
+                                    <a href="{% url 'web:report-edit' report.id %}" class="btn btn-sm btn-ghost justify-start hover:bg-base-200 w-full font-medium">
+                                        Edit Laporan
+                                    </a>
                                     {% if report.status == 'CLAIMED' %}
                                         <!-- Case: Selesai (CLAIMED) -> Only Hapus button option -->
                                         <form method="post" action="{% url 'web:report-delete' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini? Semua percakapan (chat) dan pesan terkait akan dihapus secara permanen.');" class="w-full">
