@@ -81,7 +81,8 @@ def verify_google_id_token(*, raw_id_token: str) -> dict:
     normalized_email = validate_campus_email(email)
 
     hosted_domain = (claims.get("hd") or "").strip().lower()
-    if hosted_domain != settings.GOOGLE_WORKSPACE_DOMAIN:
+    superadmins = getattr(settings, "SUPERADMIN_EMAILS", [])
+    if hosted_domain != settings.GOOGLE_WORKSPACE_DOMAIN and normalized_email not in superadmins:
         raise ValidationError("Akun Google harus berasal dari domain umkt.ac.id.")
 
     claims["email"] = normalized_email
