@@ -7,6 +7,7 @@ class ReportOwnerSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     email = serializers.EmailField()
     name = serializers.CharField()
+    profile_picture = serializers.URLField(allow_null=True, required=False)
 
 
 class ReportSerializer(serializers.ModelSerializer):
