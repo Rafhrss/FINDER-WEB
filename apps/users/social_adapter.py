@@ -11,6 +11,7 @@ from apps.users.validators import validate_campus_email
 class CampusSocialAccountAdapter(DefaultSocialAccountAdapter):
     def pre_social_login(self, request, sociallogin):
         email = sociallogin.account.extra_data.get("email") or sociallogin.user.email
+        picture = sociallogin.account.extra_data.get("picture", "").strip()
         try:
             normalized_email = validate_campus_email(email)
             sociallogin.user.email = normalized_email
@@ -21,8 +22,14 @@ class CampusSocialAccountAdapter(DefaultSocialAccountAdapter):
             raise
 
         existing_user = get_user_by_email(normalized_email)
-        if request is not None and existing_user and not sociallogin.is_existing:
-            sociallogin.connect(request, existing_user)
+        
+        if existing_user:
+            if picture and existing_user.profile_picture != picture:
+                existing_user.profile_picture = picture
+                existing_user.save(update_fields=["profile_picture"])
+                
+            if request is not None and not sociallogin.is_existing:
+                sociallogin.connect(request, existing_user)
 
     def populate_user(self, request, sociallogin, data):
         user = super().populate_user(request, sociallogin, data)
@@ -35,11 +42,16 @@ class CampusSocialAccountAdapter(DefaultSocialAccountAdapter):
 
     def save_user(self, request, sociallogin, form=None):
         user = super().save_user(request, sociallogin, form)
+        picture = sociallogin.account.extra_data.get("picture", "").strip()
         fields_to_update: list[str] = []
 
         if not user.name and user.email:
             user.name = user.email.split("@")[0]
             fields_to_update.append("name")
+
+        if picture and user.profile_picture != picture:
+            user.profile_picture = picture
+            fields_to_update.append("profile_picture")
 
         if user.has_usable_password():
             user.set_unusable_password()

@@ -52,7 +52,7 @@
                                 {% if social and social.extra_data.picture %}
                                     <img src="{{ social.extra_data.picture }}" alt="{{ report.user.name }}" class="w-full h-full object-cover">
                                 {% elif report.user.profile_picture %}
-                                    <img src="{{ report.user.profile_picture.url }}" alt="{{ report.user.name }}" class="w-full h-full object-cover">
+                                    <img src="{{ report.user.profile_picture }}" alt="{{ report.user.name }}" class="w-full h-full object-cover">
                                 {% else %}
                                     <span class="text-base-content/70 font-semibold text-lg">{{ report.user.name|slice:":2"|upper }}</span>
                                 {% endif %}
