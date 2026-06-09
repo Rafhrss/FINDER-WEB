@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR / ".env", override=True)
 
 
 def env_bool(key: str, default: bool = False) -> bool:
@@ -69,6 +69,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.core.context_processors.superadmin_emails",
             ],
         },
     },
@@ -118,6 +119,7 @@ SITE_ID = int(os.getenv("SITE_ID", "1"))
 GOOGLE_WORKSPACE_DOMAIN = (
     os.getenv("GOOGLE_WORKSPACE_DOMAIN", "umkt.ac.id").strip().lower()
 )
+SUPERADMIN_EMAILS = env_list("SUPERADMIN_EMAILS", "")
 GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID", "").strip()
 GOOGLE_OAUTH_CLIENT_SECRET = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET", "").strip()
 GOOGLE_OAUTH_ALLOWED_CLIENT_IDS = env_list(

@@ -15,8 +15,11 @@ def validate_image(image_file):
         raise ValidationError("Format gambar harus berupa JPG, JPEG, atau PNG.")
 
 
+from django.conf import settings
+
 def ensure_report_owner(*, report: Report, actor) -> None:
-    if report.user_id != actor.id:
+    superadmins = getattr(settings, "SUPERADMIN_EMAILS", [])
+    if report.user_id != actor.id and actor.email not in superadmins:
         raise OwnershipValidationError("Hanya pemilik laporan yang bisa mengubah data.")
 
 
