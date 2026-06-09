@@ -1,2 +1,2 @@
-web: python manage.py runserver
+web: python manage.py runserver 0.0.0.0:8000
 css:  .\static\win\css\tailwindcss.exe -i .\static\win\css\input.css -o .\static\win\css\output.css --watch 
