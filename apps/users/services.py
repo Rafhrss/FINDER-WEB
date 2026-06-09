@@ -92,17 +92,22 @@ def verify_google_id_token(*, raw_id_token: str) -> dict:
 def upsert_user_from_google_claims(*, claims: dict) -> User:
     email = claims["email"]
     name = (claims.get("name") or claims.get("given_name") or "").strip()
+    picture = claims.get("picture", "").strip()
     if not name:
         name = email.split("@")[0]
 
     user = get_user_by_email(email)
     if user is None:
-        return User.objects.create_user(email=email, name=name, password=None)
+        return User.objects.create_user(email=email, name=name, password=None, profile_picture=picture)
 
     fields_to_update: list[str] = []
     if user.name != name:
         user.name = name
         fields_to_update.append("name")
+        
+    if picture and user.profile_picture != picture:
+        user.profile_picture = picture
+        fields_to_update.append("profile_picture")
 
     if user.has_usable_password():
         user.set_unusable_password()
