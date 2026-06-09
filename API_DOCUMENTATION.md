@@ -251,8 +251,9 @@ GET /api/v1/reports/?q=laptop&status=FOUND
         "user": {
             "id": "550e8400-e29b-41d4-a716-446655440000",
             "email": "2411102441250@umkt.ac.id",
-            "name": "John Doe"
-        },
+            "name": "John Doe",
+            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        ,
         "title": "Lost my laptop",
         "description": "Black ThinkPad X1 Carbon",
         "location": "Gedung B",
@@ -289,6 +290,7 @@ GET /api/v1/reports/?q=laptop&status=FOUND
 | `user.id` | `uuid` | Owner's user ID |
 | `user.email` | `string` | Owner's email |
 | `user.name` | `string` | Owner's display name |
+| `user.profile_picture` | `string \| null` | Owner's profile picture URL |
 | `title` | `string` | Report title (max 180 chars) |
 | `description` | `string` | Detailed description |
 | `location` | `string` | Location of lost/found item (max 255 chars) |
@@ -337,8 +339,9 @@ curl -X POST http://localhost:8000/api/v1/reports/ \
     "user": {
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
-        "name": "John Doe"
-    },
+        "name": "John Doe",
+        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+    ,
     "title": "Lost my laptop",
     "description": "Black ThinkPad X1 Carbon",
     "location": "Gedung B",
@@ -388,8 +391,9 @@ GET /api/v1/reports/c40314c2-85cd-4eb4-b526-688257e7c9f9/
     "user": {
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
-        "name": "John Doe"
-    },
+        "name": "John Doe",
+        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+    ,
     "title": "Lost my laptop",
     "description": "Black ThinkPad X1 Carbon",
     "location": "Gedung B",
@@ -443,8 +447,9 @@ Fully update a report. All writable fields must be provided. Only the **report o
     "user": {
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
-        "name": "John Doe"
-    },
+        "name": "John Doe",
+        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+    ,
     "title": "Updated Title",
     "description": "Updated description",
     "location": "Gedung C",
@@ -507,8 +512,9 @@ Partially update a report. Only the provided fields will be updated. Only the **
     "user": {
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
-        "name": "John Doe"
-    },
+        "name": "John Doe",
+        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+    ,
     "title": "Lost my laptop",
     "description": "Black ThinkPad X1 Carbon",
     "location": "Gedung B",
@@ -596,13 +602,15 @@ _(No body required)_
     "user1": {
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
-        "name": "John Doe"
-    },
+        "name": "John Doe",
+        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+    ,
     "user2": {
         "id": "660f9500-f39c-52e5-b827-557766550001",
         "email": "2411102441251@umkt.ac.id",
-        "name": "Jane Smith"
-    },
+        "name": "Jane Smith",
+        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+    ,
     "created_at": "2026-06-07T10:00:00.000000+07:00"
 }
 ```
@@ -621,10 +629,12 @@ _(Same structure as above)_
 | `user1.id` | `uuid` | Owner's user ID |
 | `user1.email` | `string` | Owner's email |
 | `user1.name` | `string` | Owner's display name |
+| `user1.profile_picture` | `string \| null` | Owner's profile picture URL |
 | `user2` | `object` | Chat initiator info |
 | `user2.id` | `uuid` | Initiator's user ID |
 | `user2.email` | `string` | Initiator's email |
 | `user2.name` | `string` | Initiator's display name |
+| `user2.profile_picture` | `string \| null` | Initiator's profile picture URL |
 | `created_at` | `datetime` | ISO 8601 timestamp |
 
 **Error Responses**
@@ -664,8 +674,9 @@ Retrieve all messages in a chat room. Only participants can access messages.
         "sender": {
             "id": "550e8400-e29b-41d4-a716-446655440000",
             "email": "2411102441250@umkt.ac.id",
-            "name": "John Doe"
-        },
+            "name": "John Doe",
+            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        ,
         "message": "Halo, saya menemukan laptop Anda.",
         "created_at": "2026-06-07T10:05:00.000000+07:00"
     },
@@ -675,8 +686,9 @@ Retrieve all messages in a chat room. Only participants can access messages.
         "sender": {
             "id": "660f9500-f39c-52e5-b827-557766550001",
             "email": "2411102441251@umkt.ac.id",
-            "name": "Jane Smith"
-        },
+            "name": "Jane Smith",
+            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        ,
         "message": "Terima kasih! Bisa ketemu dimana?",
         "created_at": "2026-06-07T10:06:00.000000+07:00"
     }
@@ -693,6 +705,7 @@ Retrieve all messages in a chat room. Only participants can access messages.
 | `sender.id` | `uuid` | Sender's user ID |
 | `sender.email` | `string` | Sender's email |
 | `sender.name` | `string` | Sender's display name |
+| `sender.profile_picture` | `string \| null` | Sender's profile picture URL |
 | `message` | `string` | Message content |
 | `created_at` | `datetime` | ISO 8601 timestamp |
 
@@ -748,8 +761,9 @@ Send a new message in a chat room. Only participants can send messages, and only
     "sender": {
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
-        "name": "John Doe"
-    },
+        "name": "John Doe",
+        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+    ,
     "message": "Halo, saya menemukan laptop Anda.",
     "created_at": "2026-06-07T10:05:00.000000+07:00"
 }
