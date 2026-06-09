@@ -85,6 +85,47 @@ def report_create_view(request):
     return render(request, "web/report_create.html")
 
 
+from django.conf import settings
+
+@login_required
+def report_edit_view(request, report_id):
+    report = get_object_or_404(Report, id=report_id)
+    
+    superadmins = getattr(settings, "SUPERADMIN_EMAILS", [])
+    if report.user_id != request.user.id and request.user.email not in superadmins:
+        messages.error(request, "Anda tidak memiliki izin untuk mengedit laporan ini.")
+        return redirect("web:report-detail", report_id=report.id)
+
+    if request.method == "POST":
+        title = request.POST.get("title")
+        status = request.POST.get("status")
+        location = request.POST.get("location")
+        description = request.POST.get("description")
+        image = request.FILES.get("image")
+
+        if not all([title, status, location, description]):
+            messages.error(request, "Mohon lengkapi semua bidang yang wajib diisi.")
+            return render(request, "web/report_edit.html", {"report": report})
+
+        try:
+            update_report(
+                report=report,
+                actor=request.user,
+                title=title,
+                description=description,
+                location=location,
+                image=image,
+                status=status,
+            )
+            messages.success(request, "Laporan berhasil diperbarui!")
+            return redirect("web:report-detail", report_id=report.id)
+        except Exception as e:
+            messages.error(request, f"Gagal memperbarui laporan: {str(e)}")
+            return render(request, "web/report_edit.html", {"report": report})
+
+    return render(request, "web/report_edit.html", {"report": report})
+
+
 @login_required
 def my_reports_view(request):
     status_filter = request.GET.get("status")

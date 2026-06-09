@@ -19,7 +19,22 @@
             <!-- Image Block -->
             <div class="w-full aspect-square md:aspect-4/3 lg:aspect-square rounded-3xl bg-base-200/50 border border-base-300 flex items-center justify-center overflow-hidden relative shadow-sm">
                 {% if report.image %}
-                    <img src="{{ report.image }}" alt="{{ report.title }}" class="w-full h-full object-cover">
+                    <div onclick="image_modal.showModal()" class="cursor-pointer w-full h-full block">
+                        <img src="{{ report.image }}" alt="{{ report.title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                    </div>
+
+                    <!-- Image Modal -->
+                    <dialog id="image_modal" class="modal">
+                        <div class="modal-box p-0 bg-transparent shadow-none w-[95vw] max-w-5xl overflow-visible flex justify-center">
+                            <form method="dialog">
+                                <button class="btn btn-sm btn-circle btn-ghost absolute -top-12 right-0 text-white hover:bg-white/20 text-lg outline-none">✕</button>
+                            </form>
+                            <img src="{{ report.image }}" alt="{{ report.title }}" class="w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl">
+                        </div>
+                        <form method="dialog" class="modal-backdrop bg-black/80">
+                            <button class="cursor-default">close</button>
+                        </form>
+                    </dialog>
                 {% else %}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-24 h-24 text-base-content/20">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
@@ -74,25 +89,15 @@
                         {% else %}
                             <span class="badge badge-primary text-primary-content uppercase font-semibold text-xs tracking-wide px-3 py-2 rounded-md">Pemilik Laporan</span>
                         {% endif %}
-                        <span class="text-xs text-base-content font-medium">Anda dapat memperbarui status atau menghapus laporan.</span>
+                        <span class="text-xs text-base-content font-medium">Anda dapat memperbarui atau menghapus laporan.</span>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3">
-                        <form method="post" class="flex flex-wrap items-center gap-3">
+                        <a href="{% url 'web:report-edit' report.id %}" class="btn btn-outline btn-primary rounded-xl px-6 h-12 font-semibold w-full sm:w-auto">
+                            Edit Laporan
+                        </a>
+                        <form method="post" action="{% url 'web:report-delete' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini secara permanen?');" class="w-full sm:w-auto">
                             {% csrf_token %}
-                            <select name="status" class="select select-bordered bg-base-200 border-base-300 rounded-xl">
-                                {% for value, label in status_choices %}
-                                    <option value="{{ value }}" {% if report.status == value %}selected{% endif %}>
-                                        {{ label }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit" class="btn btn-primary rounded-xl px-6 h-12 font-semibold">
-                                Perbarui Status
-                            </button>
-                        </form>
-                        <form method="post" action="{% url 'web:report-delete' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini secara permanen?');">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-error text-white rounded-xl px-6 h-12 font-semibold">
+                            <button type="submit" class="btn btn-error text-white rounded-xl px-6 h-12 font-semibold w-full sm:w-auto">
                                 Hapus Laporan
                             </button>
                         </form>
