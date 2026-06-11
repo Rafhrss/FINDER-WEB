@@ -40,3 +40,17 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class MessageWriteSerializer(serializers.Serializer):
     message = serializers.CharField()
+
+
+class ChatRoomListSerializer(ChatRoomSerializer):
+    last_message = serializers.SerializerMethodField()
+
+    class Meta(ChatRoomSerializer.Meta):
+        fields = ChatRoomSerializer.Meta.fields + ("last_message",)
+        read_only_fields = fields
+
+    def get_last_message(self, obj: ChatRoom):
+        messages = getattr(obj, "prefetched_messages", [])
+        if messages:
+            return MessageSerializer(messages[0]).data
+        return None

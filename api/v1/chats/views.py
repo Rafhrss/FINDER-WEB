@@ -1,5 +1,7 @@
 from django.core.exceptions import PermissionDenied as DjangoPermissionDenied
 from django.core.exceptions import ValidationError as DjangoValidationError
+import uuid
+
 from rest_framework import status
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -7,11 +9,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.v1.chats.serializers import (
+    ChatRoomListSerializer,
     ChatRoomSerializer,
     MessageSerializer,
     MessageWriteSerializer,
 )
-from apps.chats.selectors import get_chatroom_by_id
+from apps.chats.selectors import get_chatroom_by_id, list_chatrooms_for_user
 from apps.chats.services import (
     cleanup_expired_chatrooms,
     create_chatroom,
@@ -36,17 +39,27 @@ class ChatRoomCreateAPIView(APIView):
         return Response(ChatRoomSerializer(chatroom).data, status=status_code)
 
 
+class ChatRoomListAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        cleanup_expired_chatrooms()
+        chatrooms = list_chatrooms_for_user(user=request.user)
+        serializer = ChatRoomListSerializer(chatrooms, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class MessageListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def _get_chatroom(self, chatroom_id: int):
+    def _get_chatroom(self, chatroom_id: uuid.UUID):
         cleanup_expired_chatrooms()
         chatroom = get_chatroom_by_id(chatroom_id)
         if not chatroom:
             raise NotFound("Chat tidak ditemukan atau sudah kedaluwarsa.")
         return chatroom
 
-    def get(self, request, chatroom_id: int):
+    def get(self, request, chatroom_id: uuid.UUID):
         chatroom = self._get_chatroom(chatroom_id)
         try:
             chat_messages = get_messages_for_chatroom(
@@ -60,7 +73,7 @@ class MessageListCreateAPIView(APIView):
         serializer = MessageSerializer(chat_messages, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, chatroom_id: int):
+    def post(self, request, chatroom_id: uuid.UUID):
         chatroom = self._get_chatroom(chatroom_id)
         serializer = MessageWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

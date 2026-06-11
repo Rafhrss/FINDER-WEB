@@ -23,9 +23,10 @@
     - [PATCH /reports/:id/](#25-update-report-partial)
     - [DELETE /reports/:id/](#26-delete-report)
   - [Chats](#3-chats)
-    - [POST /chats/reports/:report_id/rooms/](#31-create-chatroom)
-    - [GET /chats/rooms/:chatroom_id/messages/](#32-list-messages)
-    - [POST /chats/rooms/:chatroom_id/messages/](#33-send-message)
+    - [GET /chats/rooms/](#31-list-chat-rooms)
+    - [POST /chats/reports/:report_id/rooms/](#32-create-chatroom)
+    - [GET /chats/rooms/:chatroom_id/messages/](#33-list-messages)
+    - [POST /chats/rooms/:chatroom_id/messages/](#34-send-message)
 - [Enumerations](#enumerations)
 
 ---
@@ -574,7 +575,74 @@ The chat system allows users to communicate about reports. Key business rules:
 
 ---
 
-#### 3.1 Create ChatRoom
+#### 3.1 List Chat Rooms
+
+Retrieve all chat rooms for the currently authenticated user. The rooms are ordered by the most recent message (`last_message_at`) descending, or by creation date if no messages exist. The response includes the `last_message` if available.
+
+| | |
+|---|---|
+| **URL** | `GET /api/v1/chats/rooms/` |
+| **Auth** | 🔒 Authenticated |
+
+**Response** — `200 OK`
+
+```json
+[
+    {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "report": "c40314c2-85cd-4eb4-b526-688257e7c9f9",
+        "user1": {
+            "id": "550e8400-e29b-41d4-a716-446655440000",
+            "email": "2411102441250@umkt.ac.id",
+            "name": "John Doe",
+            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        },
+        "user2": {
+            "id": "660f9500-f39c-52e5-b827-557766550001",
+            "email": "2411102441251@umkt.ac.id",
+            "name": "Jane Smith",
+            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        },
+        "created_at": "2026-06-07T10:00:00.000000+07:00",
+        "last_message": {
+            "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+            "chatroom": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            "sender": {
+                "id": "550e8400-e29b-41d4-a716-446655440000",
+                "email": "2411102441250@umkt.ac.id",
+                "name": "John Doe",
+                "profile_picture": "https://lh3.googleusercontent.com/a/example"
+            },
+            "message": "Halo, saya menemukan laptop Anda.",
+            "created_at": "2026-06-07T10:05:00.000000+07:00"
+        }
+    }
+]
+```
+
+**Response Fields (per chat room)**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `uuid` | Unique chat room identifier |
+| `report` | `uuid` | ID of the associated report |
+| `user1` | `object` | Report owner info |
+| `user1.profile_picture` | `string \| null` | Owner's profile picture URL |
+| `user2` | `object` | Chat initiator info |
+| `user2.profile_picture` | `string \| null` | Initiator's profile picture URL |
+| `created_at` | `datetime` | ISO 8601 timestamp |
+| `last_message` | `object \| null` | The most recent message object, if any |
+| `last_message.message` | `string` | Content of the last message |
+
+**Error Responses**
+
+| Status | Condition | Example |
+|--------|-----------|---------|
+| `401` | Not authenticated | `{"detail": "Authentication credentials were not provided."}` |
+
+---
+
+#### 3.2 Create ChatRoom
 
 Create or retrieve a chat room for a specific report. If a chat room already exists between the authenticated user and the report owner, the existing room is returned.
 
@@ -647,22 +715,20 @@ _(Same structure as above)_
 
 ---
 
-#### 3.2 List Messages
+#### 3.3 List Messages
 
 Retrieve all messages in a chat room. Only participants can access messages.
 
 | | |
 |---|---|
-| **URL** | `GET /api/v1/chats/rooms/<int:chatroom_id>/messages/` |
+| **URL** | `GET /api/v1/chats/rooms/<uuid:chatroom_id>/messages/` |
 | **Auth** | 🔒 Authenticated (participant only) |
-
-> ⚠️ **Note**: The `chatroom_id` parameter currently uses `int` type in the URL. This may need to be updated to `uuid` in a future release.
 
 **Path Parameters**
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `chatroom_id` | `int` | The ID of the chat room |
+| `chatroom_id` | `uuid` | The ID of the chat room |
 
 **Response** — `200 OK`
 
@@ -720,23 +786,21 @@ Retrieve all messages in a chat room. Only participants can access messages.
 
 ---
 
-#### 3.3 Send Message
+#### 3.4 Send Message
 
 Send a new message in a chat room. Only participants can send messages, and only within the first 2 days of the chat room's creation.
 
 | | |
 |---|---|
-| **URL** | `POST /api/v1/chats/rooms/<int:chatroom_id>/messages/` |
+| **URL** | `POST /api/v1/chats/rooms/<uuid:chatroom_id>/messages/` |
 | **Auth** | 🔒 Authenticated (participant only) |
 | **Content-Type** | `application/json` |
-
-> ⚠️ **Note**: The `chatroom_id` parameter currently uses `int` type in the URL. This may need to be updated to `uuid` in a future release.
 
 **Path Parameters**
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `chatroom_id` | `int` | The ID of the chat room |
+| `chatroom_id` | `uuid` | The ID of the chat room |
 
 **Request Body**
 
@@ -807,6 +871,7 @@ Send a new message in a chat room. Only participants can send messages, and only
 | `PUT` | `/api/v1/reports/:id/` | 🔒 | Full update report (owner) |
 | `PATCH` | `/api/v1/reports/:id/` | 🔒 | Partial update report (owner) |
 | `DELETE` | `/api/v1/reports/:id/` | 🔒 | Delete report (owner) |
+| `GET` | `/api/v1/chats/rooms/` | 🔒 | List all chat rooms |
 | `POST` | `/api/v1/chats/reports/:id/rooms/` | 🔒 | Create/get chat room |
 | `GET` | `/api/v1/chats/rooms/:id/messages/` | 🔒 | List chat messages |
 | `POST` | `/api/v1/chats/rooms/:id/messages/` | 🔒 | Send a message |
