@@ -1,9 +1,10 @@
+import uuid
 from django.db.models import Max, Prefetch, Q
 
 from apps.chats.models import ChatRoom, Message
 
 
-def get_chatroom_by_id(chatroom_id: int) -> ChatRoom | None:
+def get_chatroom_by_id(chatroom_id: uuid.UUID) -> ChatRoom | None:
     return (
         ChatRoom.objects.select_related("report", "user1", "user2")
         .filter(id=chatroom_id)

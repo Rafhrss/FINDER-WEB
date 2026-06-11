@@ -1,3 +1,4 @@
+import uuid
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
@@ -33,7 +34,7 @@ def chat_list_view(request):
 
 
 @login_required
-def chat_room_view(request, chatroom_id: int):
+def chat_room_view(request, chatroom_id: uuid.UUID):
     cleanup_expired_chatrooms()
     chatroom = get_chatroom_by_id(chatroom_id)
     if not chatroom:
