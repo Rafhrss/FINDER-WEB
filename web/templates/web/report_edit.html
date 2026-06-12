@@ -55,7 +55,7 @@
                         <label class="label pt-0 pb-2">
                             <span class="label-text text-xs font-bold tracking-widest uppercase text-base-content/70">Lokasi Terakhir / Ditemukan</span>
                         </label>
-                        <select name="location" class="select select-bordered bg-base-200 focus:bg-base-200 w-full rounded-xl transition-all font-normal" required>
+                        <select id="locationSelect" name="location" class="select select-bordered bg-base-200 focus:bg-base-200 w-full rounded-xl transition-all font-normal" required onchange="toggleDetailLokasi()">
                             <option value="" disabled>Pilih Gedung / Area...</option>
                             <optgroup label="Gedung">
                                 <option value="Gedung A" {% if report.location == 'Gedung A' %}selected{% endif %}>Gedung A</option>
@@ -84,8 +84,21 @@
                                 <option value="Lab Hardware" {% if report.location == 'Lab Hardware' %}selected{% endif %}>Lab Hardware</option>
                                 <option value="Lab Komputer Gedung E" {% if report.location == 'Lab Komputer Gedung E' %}selected{% endif %}>Lab Komputer Gedung E</option>
                             </optgroup>
-                            <option value="Lainnya" {% if report.location == 'Lainnya' %}selected{% endif %}>Lainnya</option>
+                            <!-- We use a custom logic to handle if location is not in standard list, default to "Lainnya" and show detail field -->
+                            {% with standard_locations="Gedung A,Gedung B,Gedung C,Gedung D,Gedung E,Gedung F,Gedung G,Parkiran A,Parkiran D,Parkiran E,Parkiran F,Parkiran G,Parkiran Lapangan,Kantin Utama,Perpustakaan,Mushola Kampus,Lab Software,Lab Hardware,Lab Komputer Gedung E" %}
+                            <option value="Lainnya" {% if report.location not in standard_locations %}selected{% endif %}>Lainnya</option>
+                            {% endwith %}
                         </select>
+                    </div>
+
+                    <!-- Detail Lokasi (Opsional) - Muncul jika Lainnya dipilih -->
+                    <div id="detailLokasiContainer" class="form-control w-full hidden">
+                        <label class="label pt-0 pb-2">
+                            <span class="label-text text-xs font-bold tracking-widest uppercase text-base-content/70">Detail Lokasi (Opsional)</span>
+                        </label>
+                        {% with standard_locations="Gedung A,Gedung B,Gedung C,Gedung D,Gedung E,Gedung F,Gedung G,Parkiran A,Parkiran D,Parkiran E,Parkiran F,Parkiran G,Parkiran Lapangan,Kantin Utama,Perpustakaan,Mushola Kampus,Lab Software,Lab Hardware,Lab Komputer Gedung E" %}
+                        <input type="text" id="detailLokasiInput" name="location_detail" placeholder="Contoh: Di laci meja pojok" class="input bg-transparent border-2 border-base-300 border-dashed focus:border-primary w-full rounded-xl transition-all" disabled value="{% if report.location not in standard_locations %}{{ report.location }}{% endif %}">
+                        {% endwith %}
                     </div>
 
                 </div>
@@ -208,5 +221,41 @@
             reader.readAsDataURL(file);
         }
     }
+
+    function clearImage() {
+        const input = document.getElementById('imageInput');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const uploadBox = document.getElementById('uploadBox');
+        
+        input.value = ''; // Clear file
+        previewContainer.classList.add('hidden');
+        uploadBox.classList.remove('hidden');
+    }
+
+    function toggleDetailLokasi() {
+        const select = document.getElementById('locationSelect');
+        const container = document.getElementById('detailLokasiContainer');
+        const input = document.getElementById('detailLokasiInput');
+        
+        if (select.value === 'Lainnya') {
+            container.classList.remove('hidden');
+            input.disabled = false;
+            input.name = 'location'; // Set name to location so it overrides the select
+            select.name = 'location_dropdown'; // Remove the name from select so it doesn't conflict
+            input.required = true;
+        } else {
+            container.classList.add('hidden');
+            input.disabled = true;
+            input.name = 'location_detail';
+            select.name = 'location'; // Restore name to select
+            input.required = false;
+            // Dont clear input.value here because it might be the prefilled initial value on edit.
+        }
+    }
+
+    // Initialize on page load in case of form validation error or prefilled state
+    document.addEventListener('DOMContentLoaded', () => {
+        toggleDetailLokasi();
+    });
 </script>
 {% endblock %}

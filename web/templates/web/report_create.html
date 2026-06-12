@@ -49,7 +49,7 @@
                         <label class="label pt-0 pb-2">
                             <span class="label-text text-xs font-bold tracking-widest uppercase text-base-content/70">Lokasi Terakhir / Ditemukan</span>
                         </label>
-                        <select name="location" class="select select-bordered bg-base-200 focus:bg-base-200 w-full rounded-xl transition-all font-normal" required>
+                        <select id="locationSelect" name="location" class="select select-bordered bg-base-200 focus:bg-base-200 w-full rounded-xl transition-all font-normal" required onchange="toggleDetailLokasi()">
                             <option value="" disabled {% if not request_post.location %}selected{% endif %}>Pilih Gedung / Area...</option>
                             <optgroup label="Gedung">
                                 <option value="Gedung A" {% if request_post.location == 'Gedung A' %}selected{% endif %}>Gedung A</option>
@@ -80,6 +80,14 @@
                             </optgroup>
                             <option value="Lainnya" {% if request_post.location == 'Lainnya' %}selected{% endif %}>Lainnya</option>
                         </select>
+                    </div>
+
+                    <!-- Detail Lokasi (Opsional) - Muncul jika Lainnya dipilih -->
+                    <div id="detailLokasiContainer" class="form-control w-full hidden">
+                        <label class="label pt-0 pb-2">
+                            <span class="label-text text-xs font-bold tracking-widest uppercase text-base-content/70">Detail Lokasi (Opsional)</span>
+                        </label>
+                        <input type="text" id="detailLokasiInput" name="location_detail" placeholder="Contoh: Di laci meja pojok" class="input bg-transparent border-2 border-base-300 border-dashed focus:border-primary w-full rounded-xl transition-all" disabled>
                     </div>
 
                 </div>
@@ -212,6 +220,32 @@
         previewContainer.classList.add('hidden');
         uploadBox.classList.remove('hidden');
     }
+
+    function toggleDetailLokasi() {
+        const select = document.getElementById('locationSelect');
+        const container = document.getElementById('detailLokasiContainer');
+        const input = document.getElementById('detailLokasiInput');
+        
+        if (select.value === 'Lainnya') {
+            container.classList.remove('hidden');
+            input.disabled = false;
+            input.name = 'location'; // Set name to location so it overrides the select
+            select.name = 'location_dropdown'; // Remove the name from select so it doesn't conflict
+            input.required = true;
+        } else {
+            container.classList.add('hidden');
+            input.disabled = true;
+            input.name = 'location_detail';
+            select.name = 'location'; // Restore name to select
+            input.required = false;
+            input.value = ''; // Clear input if hidden
+        }
+    }
+
+    // Initialize on page load in case of form validation error
+    document.addEventListener('DOMContentLoaded', () => {
+        toggleDetailLokasi();
+    });
 </script>
 {% endblock %}
 
