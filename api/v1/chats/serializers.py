@@ -1,6 +1,14 @@
 from rest_framework import serializers
 
 from apps.chats.models import ChatRoom, Message
+from apps.reports.models import Report
+
+
+class ReportCompactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = ("id", "title", "image", "status")
+        read_only_fields = fields
 
 
 class ChatParticipantSerializer(serializers.Serializer):
@@ -11,6 +19,7 @@ class ChatParticipantSerializer(serializers.Serializer):
 
 
 class ChatRoomSerializer(serializers.ModelSerializer):
+    report = ReportCompactSerializer(read_only=True)
     user1 = serializers.SerializerMethodField()
     user2 = serializers.SerializerMethodField()
 

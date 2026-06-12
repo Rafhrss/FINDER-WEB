@@ -19,6 +19,14 @@
                     {% endif %}
                 {% endwith %}
             </div>
+            <div class="flex items-center mt-0.5 mb-1">
+                <p class="text-[10px] font-medium text-base-content/60 truncate flex-1 border-l-2 border-primary/30 pl-1.5">
+                    {% if room.report.status == 'LOST' %}<span class="text-error font-bold">Hilang:</span>
+                    {% elif room.report.status == 'FOUND' %}<span class="text-success font-bold">Ditemukan:</span>
+                    {% else %}<span class="text-info font-bold">Selesai:</span>{% endif %}
+                    {{ room.report.title }}
+                </p>
+            </div>
             <div class="flex items-center justify-between">
                 {% with latest=room.prefetched_messages.0 %}
                     {% if latest %}

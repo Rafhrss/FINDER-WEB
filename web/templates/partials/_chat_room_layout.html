@@ -69,20 +69,44 @@
 
         {% if chatroom %}
             {# ── CHAT HEADER ── #}
-            <header class="px-5 py-3 border-b border-base-300 bg-base-200 flex items-center gap-3 shrink-0">
-                {# Mobile back #}
-                <a href="{% url 'web:chat-list' %}" class="btn btn-ghost btn-sm btn-circle chat-back-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                </a>
-                {# Avatar #}
-                <div class="avatar">
-                    <div class="w-10 h-10 rounded-full overflow-hidden bg-base-300">
-                        {% include 'partials/_user_avatar.html' with user=other_user %}
+            <header class="px-5 py-3 border-b border-base-300 bg-base-200 flex flex-col gap-3 shrink-0">
+                <div class="flex items-center gap-3">
+                    {# Mobile back #}
+                    <a href="{% url 'web:chat-list' %}" class="btn btn-ghost btn-sm btn-circle chat-back-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </a>
+                    {# Avatar #}
+                    <div class="avatar">
+                        <div class="w-10 h-10 rounded-full overflow-hidden bg-base-300">
+                            {% include 'partials/_user_avatar.html' with user=other_user %}
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h2 class="text-base font-bold text-base-content truncate">{{ other_user.name }}</h2>
                     </div>
                 </div>
-                <div class="flex-1 min-w-0">
-                    <h2 class="text-base font-bold text-base-content truncate">{{ other_user.name }}</h2>
-                </div>
+
+                {# Report Banner #}
+                <a href="{% url 'web:report-detail' chatroom.report.id %}" class="flex items-center gap-3 bg-base-100 rounded-lg p-2 border border-base-300 hover:border-primary/50 hover:shadow-sm transition-all">
+                    {% if chatroom.report.image %}
+                        <img src="{{ chatroom.report.image }}" alt="{{ chatroom.report.title }}" class="w-10 h-10 object-cover rounded-md">
+                    {% else %}
+                        <div class="w-10 h-10 rounded-md bg-base-300 flex items-center justify-center text-base-content/50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        </div>
+                    {% endif %}
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-xs font-bold text-base-content truncate">{{ chatroom.report.title }}</h3>
+                        <p class="text-[10px] font-medium mt-0.5">
+                            {% if chatroom.report.status == 'LOST' %}<span class="text-error">Barang Hilang</span>
+                            {% elif chatroom.report.status == 'FOUND' %}<span class="text-success">Barang Ditemukan</span>
+                            {% else %}<span class="text-info">Selesai</span>{% endif %}
+                        </p>
+                    </div>
+                    <div class="pr-2 text-base-content/40">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </div>
+                </a>
             </header>
 
             {# ── MESSAGES ── #}
