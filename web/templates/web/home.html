@@ -5,7 +5,7 @@
     <!-- Carousel Section -->
     <section class="mb-12 relative">
         <!-- Wrapper Carousel (Scrolling Container) -->
-        <div class="carousel w-full rounded-3xl shadow-lg bg-linear-to-r from-[#101A24] to-[#0A121A] overflow-hidden">
+        <div id="homeCarousel" class="carousel w-full rounded-3xl shadow-lg bg-linear-to-r from-[#101A24] to-[#0A121A] overflow-hidden">
             {% with carousel_reports=reports|slice:":3" %}
             {% for report in carousel_reports %}
             <div id="slide{{ forloop.counter }}" class="carousel-item relative w-full hover:brightness-105 transition-all">
@@ -113,6 +113,15 @@
                         <a href="#slide{{ forloop.counter|add:'1' }}" class="btn btn-circle btn-sm md:btn-md pointer-events-auto shadow-md bg-white/10 hover:bg-white/20 border-none text-white backdrop-blur-sm">❯</a>
                     {% endif %}
                 </div>
+                
+                <!-- Navigation Dots -->
+                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-30">
+                    {% for inner_report in carousel_reports %}
+                        <a href="#slide{{ forloop.counter }}" aria-label="Ke Slide {{ forloop.counter }}" 
+                           class="rounded-full transition-all duration-300 {% if forloop.counter == forloop.parentloop.counter %}w-3 h-3 bg-[#13e2a4] shadow-[0_0_10px_rgba(19,226,164,0.5)]{% else %}w-1 h-2.5 bg-white/30 hover:bg-white/60{% endif %}">
+                        </a>
+                    {% endfor %}
+                </div>
                 {% endif %}
             </div>
             {% empty %}
@@ -145,4 +154,37 @@
             </div>
         {% endfor %}
     </section>
+
+    <!-- Carousel Auto-Play Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('homeCarousel');
+            if (!carousel) return;
+
+            let autoPlayInterval;
+            
+            const startAutoPlay = () => {
+                // Clear any existing interval to prevent duplicates
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = setInterval(() => {
+                    const maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
+                    // If we are at the last slide (with a 10px margin of error for fractional pixels)
+                    if (carousel.scrollLeft >= maxScrollLeft - 10) {
+                        carousel.scrollTo({ left: 0, behavior: 'smooth' }); // Loop back to start
+                    } else {
+                        carousel.scrollTo({ left: carousel.scrollLeft + carousel.clientWidth, behavior: 'smooth' }); // Next slide
+                    }
+                }, 5000); // Ganti slide setiap 5 detik
+            };
+
+            // Mulai auto-play
+            startAutoPlay();
+
+            // Pause auto-play saat kursor diarahkan atau disentuh (agar user bisa membaca/klik)
+            carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+            carousel.addEventListener('mouseleave', startAutoPlay);
+            carousel.addEventListener('touchstart', () => clearInterval(autoPlayInterval));
+            carousel.addEventListener('touchend', startAutoPlay);
+        });
+    </script>
 {% endblock %}
