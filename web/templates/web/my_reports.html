@@ -88,7 +88,7 @@
                     </div>
 
                     <!-- Right Side: Quick Actions & Obrolan Count -->
-                    <div class="flex items-center gap-4 shrink-0 justify-end w-full sm:w-32" onclick="event.stopPropagation();">
+                    <div class="flex items-center gap-4 shrink-0 justify-end w-full sm:w-auto" style="min-width: 130px;" onclick="event.stopPropagation();">
                         <!-- Chat badge count -->
                         {% if report.chat_rooms_count %}
                             <span class="badge badge-sm bg-brand-primary/10 border border-brand-primary/20 text-brand-primary font-semibold px-2.5 py-3.5 rounded-lg flex items-center gap-1 text-xs shrink-0" title="Chat Aktif">
