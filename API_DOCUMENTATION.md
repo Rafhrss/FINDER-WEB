@@ -599,7 +599,12 @@ Retrieve all chat rooms for the currently authenticated user. The rooms are orde
 [
     {
         "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-        "report": "c40314c2-85cd-4eb4-b526-688257e7c9f9",
+        "report": {
+            "id": "c40314c2-85cd-4eb4-b526-688257e7c9f9",
+            "title": "Lost my laptop",
+            "image": "https://hgbacpslssmgpniobtys.supabase.co/storage/v1/object/public/images2/example.jpg",
+            "status": "LOST"
+        },
         "user1": {
             "id": "550e8400-e29b-41d4-a716-446655440000",
             "email": "2411102441250@umkt.ac.id",
@@ -634,7 +639,11 @@ Retrieve all chat rooms for the currently authenticated user. The rooms are orde
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | `uuid` | Unique chat room identifier |
-| `report` | `uuid` | ID of the associated report |
+| `report` | `object` | Report summary object |
+| `report.id` | `uuid` | Report ID |
+| `report.title` | `string` | Report title |
+| `report.image` | `string \| null` | URL to report image |
+| `report.status` | `string` | Report status |
 | `user1` | `object` | Report owner info |
 | `user1.profile_picture` | `string \| null` | Owner's profile picture URL |
 | `user2` | `object` | Chat initiator info |
@@ -675,19 +684,24 @@ _(No body required)_
 ```json
 {
     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "report": "c40314c2-85cd-4eb4-b526-688257e7c9f9",
+    "report": {
+        "id": "c40314c2-85cd-4eb4-b526-688257e7c9f9",
+        "title": "Lost my laptop",
+        "image": "https://hgbacpslssmgpniobtys.supabase.co/storage/v1/object/public/images2/example.jpg",
+        "status": "LOST"
+    },
     "user1": {
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
         "name": "John Doe",
         "profile_picture": "https://lh3.googleusercontent.com/a/example"
-    ,
+    },
     "user2": {
         "id": "660f9500-f39c-52e5-b827-557766550001",
         "email": "2411102441251@umkt.ac.id",
         "name": "Jane Smith",
         "profile_picture": "https://lh3.googleusercontent.com/a/example"
-    ,
+    },
     "created_at": "2026-06-07T10:00:00.000000+07:00"
 }
 ```
@@ -701,7 +715,11 @@ _(Same structure as above)_
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | `uuid` | Unique chat room identifier |
-| `report` | `uuid` | ID of the associated report |
+| `report` | `object` | Report summary object |
+| `report.id` | `uuid` | Report ID |
+| `report.title` | `string` | Report title |
+| `report.image` | `string \| null` | URL to report image |
+| `report.status` | `string` | Report status |
 | `user1` | `object` | Report owner info |
 | `user1.id` | `uuid` | Owner's user ID |
 | `user1.email` | `string` | Owner's email |
