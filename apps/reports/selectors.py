@@ -1,5 +1,19 @@
 from django.db.models import Q, Count
-from apps.reports.models import Report
+from apps.reports.models import Report, ReportStatus
+
+
+def get_user_report_statistics(user) -> dict:
+    stats = Report.objects.filter(user=user).values("status").annotate(count=Count("id"))
+    result = {
+        ReportStatus.LOST.lower(): 0,
+        ReportStatus.FOUND.lower(): 0,
+        ReportStatus.CLAIMED.lower(): 0,
+    }
+    for stat in stats:
+        status_key = stat["status"].lower()
+        if status_key in result:
+            result[status_key] = stat["count"]
+    return result
 
 
 def list_reports(

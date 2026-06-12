@@ -10,6 +10,17 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
 
+class UserMeSerializer(UserSerializer):
+    statistics = serializers.SerializerMethodField()
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ("statistics",)
+
+    def get_statistics(self, obj):
+        from apps.reports.selectors import get_user_report_statistics
+        return get_user_report_statistics(obj)
+
+
 class GoogleLoginSerializer(serializers.Serializer):
     id_token = serializers.CharField(trim_whitespace=True, write_only=True)
 

@@ -163,7 +163,12 @@ Authorization: Token a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
     "id": "550e8400-e29b-41d4-a716-446655440000",
     "email": "2411102441250@umkt.ac.id",
     "name": "John Doe",
-    "profile_picture": null
+    "profile_picture": null,
+    "statistics": {
+        "lost": 2,
+        "found": 1,
+        "claimed": 3
+    }
 }
 ```
 
@@ -175,6 +180,10 @@ Authorization: Token a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 | `email` | `string` | User's campus email |
 | `name` | `string` | Display name |
 | `profile_picture` | `string \| null` | URL to profile picture |
+| `statistics` | `object` | User's report statistics |
+| `statistics.lost` | `int` | Total LOST reports |
+| `statistics.found` | `int` | Total FOUND reports |
+| `statistics.claimed` | `int` | Total CLAIMED reports |
 
 **Error Responses**
 

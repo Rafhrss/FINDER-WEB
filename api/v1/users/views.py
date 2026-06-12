@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.v1.users.serializers import GoogleLoginSerializer, UserSerializer
+from api.v1.users.serializers import GoogleLoginSerializer, UserMeSerializer, UserSerializer
 from apps.users.services import login_with_google_id_token, logout_user
 
 
@@ -31,7 +31,7 @@ class MeAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response(UserSerializer(request.user).data, status=status.HTTP_200_OK)
+        return Response(UserMeSerializer(request.user).data, status=status.HTTP_200_OK)
 
 
 class LogoutAPIView(APIView):
