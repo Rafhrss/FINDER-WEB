@@ -124,7 +124,8 @@ Authenticate using a Google OAuth2 ID Token. If the user does not exist, a new a
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
         "name": "John Doe",
-        "profile_picture": null
+        "profile_picture": null,
+        "is_admin": false
     }
 }
 ```
@@ -164,6 +165,7 @@ Authorization: Token a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
     "email": "2411102441250@umkt.ac.id",
     "name": "John Doe",
     "profile_picture": null,
+    "is_admin": false,
     "statistics": {
         "lost": 2,
         "found": 1,
@@ -180,6 +182,7 @@ Authorization: Token a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0
 | `email` | `string` | User's campus email |
 | `name` | `string` | Display name |
 | `profile_picture` | `string \| null` | URL to profile picture |
+| `is_admin` | `boolean` | Indicates if the user is an admin |
 | `statistics` | `object` | User's report statistics |
 | `statistics.lost` | `int` | Total LOST reports |
 | `statistics.found` | `int` | Total FOUND reports |
@@ -262,7 +265,8 @@ GET /api/v1/reports/?q=laptop&status=FOUND
             "id": "550e8400-e29b-41d4-a716-446655440000",
             "email": "2411102441250@umkt.ac.id",
             "name": "John Doe",
-            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+            "profile_picture": "https://lh3.googleusercontent.com/a/example",
+            "is_admin": false
         ,
         "title": "Lost my laptop",
         "description": "Black ThinkPad X1 Carbon",
@@ -300,7 +304,8 @@ GET /api/v1/reports/?q=laptop&status=FOUND
 | `user.id` | `uuid` | Owner's user ID |
 | `user.email` | `string` | Owner's email |
 | `user.name` | `string` | Owner's display name |
-| `user.profile_picture` | `string \| null` | Owner's profile picture URL |
+| `user.profile_picture` | `string \| null` | Owner\'s profile picture URL |
+| `user.is_admin` | `boolean` | Owner admin status |
 | `title` | `string` | Report title (max 180 chars) |
 | `description` | `string` | Detailed description |
 | `location` | `string` | Location of lost/found item (max 255 chars) |
@@ -350,7 +355,8 @@ curl -X POST http://localhost:8000/api/v1/reports/ \
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
         "name": "John Doe",
-        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        "profile_picture": "https://lh3.googleusercontent.com/a/example",
+        "is_admin": false
     ,
     "title": "Lost my laptop",
     "description": "Black ThinkPad X1 Carbon",
@@ -402,7 +408,8 @@ GET /api/v1/reports/c40314c2-85cd-4eb4-b526-688257e7c9f9/
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
         "name": "John Doe",
-        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        "profile_picture": "https://lh3.googleusercontent.com/a/example",
+        "is_admin": false
     ,
     "title": "Lost my laptop",
     "description": "Black ThinkPad X1 Carbon",
@@ -458,7 +465,8 @@ Fully update a report. All writable fields must be provided. Only the **report o
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
         "name": "John Doe",
-        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        "profile_picture": "https://lh3.googleusercontent.com/a/example",
+        "is_admin": false
     ,
     "title": "Updated Title",
     "description": "Updated description",
@@ -523,7 +531,8 @@ Partially update a report. Only the provided fields will be updated. Only the **
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
         "name": "John Doe",
-        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        "profile_picture": "https://lh3.googleusercontent.com/a/example",
+        "is_admin": false
     ,
     "title": "Lost my laptop",
     "description": "Black ThinkPad X1 Carbon",
@@ -609,13 +618,15 @@ Retrieve all chat rooms for the currently authenticated user. The rooms are orde
             "id": "550e8400-e29b-41d4-a716-446655440000",
             "email": "2411102441250@umkt.ac.id",
             "name": "John Doe",
-            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+            "profile_picture": "https://lh3.googleusercontent.com/a/example",
+            "is_admin": false
         },
         "user2": {
             "id": "660f9500-f39c-52e5-b827-557766550001",
             "email": "2411102441251@umkt.ac.id",
             "name": "Jane Smith",
-            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+            "profile_picture": "https://lh3.googleusercontent.com/a/example",
+            "is_admin": false
         },
         "created_at": "2026-06-07T10:00:00.000000+07:00",
         "last_message": {
@@ -625,7 +636,8 @@ Retrieve all chat rooms for the currently authenticated user. The rooms are orde
                 "id": "550e8400-e29b-41d4-a716-446655440000",
                 "email": "2411102441250@umkt.ac.id",
                 "name": "John Doe",
-                "profile_picture": "https://lh3.googleusercontent.com/a/example"
+                "profile_picture": "https://lh3.googleusercontent.com/a/example",
+                "is_admin": false
             },
             "message": "Halo, saya menemukan laptop Anda.",
             "created_at": "2026-06-07T10:05:00.000000+07:00"
@@ -645,9 +657,11 @@ Retrieve all chat rooms for the currently authenticated user. The rooms are orde
 | `report.image` | `string \| null` | URL to report image |
 | `report.status` | `string` | Report status |
 | `user1` | `object` | Report owner info |
-| `user1.profile_picture` | `string \| null` | Owner's profile picture URL |
+| `user1.profile_picture` | `string \| null` | Owner\'s profile picture URL |
+| `user1.is_admin` | `boolean` | Owner admin status |
 | `user2` | `object` | Chat initiator info |
-| `user2.profile_picture` | `string \| null` | Initiator's profile picture URL |
+| `user2.profile_picture` | `string \| null` | Initiator\'s profile picture URL |
+| `user2.is_admin` | `boolean` | Initiator admin status |
 | `created_at` | `datetime` | ISO 8601 timestamp |
 | `last_message` | `object \| null` | The most recent message object, if any |
 | `last_message.message` | `string` | Content of the last message |
@@ -694,13 +708,15 @@ _(No body required)_
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
         "name": "John Doe",
-        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        "profile_picture": "https://lh3.googleusercontent.com/a/example",
+        "is_admin": false
     },
     "user2": {
         "id": "660f9500-f39c-52e5-b827-557766550001",
         "email": "2411102441251@umkt.ac.id",
         "name": "Jane Smith",
-        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        "profile_picture": "https://lh3.googleusercontent.com/a/example",
+        "is_admin": false
     },
     "created_at": "2026-06-07T10:00:00.000000+07:00"
 }
@@ -724,12 +740,14 @@ _(Same structure as above)_
 | `user1.id` | `uuid` | Owner's user ID |
 | `user1.email` | `string` | Owner's email |
 | `user1.name` | `string` | Owner's display name |
-| `user1.profile_picture` | `string \| null` | Owner's profile picture URL |
+| `user1.profile_picture` | `string \| null` | Owner\'s profile picture URL |
+| `user1.is_admin` | `boolean` | Owner admin status |
 | `user2` | `object` | Chat initiator info |
 | `user2.id` | `uuid` | Initiator's user ID |
 | `user2.email` | `string` | Initiator's email |
 | `user2.name` | `string` | Initiator's display name |
-| `user2.profile_picture` | `string \| null` | Initiator's profile picture URL |
+| `user2.profile_picture` | `string \| null` | Initiator\'s profile picture URL |
+| `user2.is_admin` | `boolean` | Initiator admin status |
 | `created_at` | `datetime` | ISO 8601 timestamp |
 
 **Error Responses**
@@ -768,7 +786,8 @@ Retrieve all messages in a chat room. Only participants can access messages.
             "id": "550e8400-e29b-41d4-a716-446655440000",
             "email": "2411102441250@umkt.ac.id",
             "name": "John Doe",
-            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+            "profile_picture": "https://lh3.googleusercontent.com/a/example",
+            "is_admin": false
         ,
         "message": "Halo, saya menemukan laptop Anda.",
         "created_at": "2026-06-07T10:05:00.000000+07:00"
@@ -780,7 +799,8 @@ Retrieve all messages in a chat room. Only participants can access messages.
             "id": "660f9500-f39c-52e5-b827-557766550001",
             "email": "2411102441251@umkt.ac.id",
             "name": "Jane Smith",
-            "profile_picture": "https://lh3.googleusercontent.com/a/example"
+            "profile_picture": "https://lh3.googleusercontent.com/a/example",
+            "is_admin": false
         ,
         "message": "Terima kasih! Bisa ketemu dimana?",
         "created_at": "2026-06-07T10:06:00.000000+07:00"
@@ -798,7 +818,8 @@ Retrieve all messages in a chat room. Only participants can access messages.
 | `sender.id` | `uuid` | Sender's user ID |
 | `sender.email` | `string` | Sender's email |
 | `sender.name` | `string` | Sender's display name |
-| `sender.profile_picture` | `string \| null` | Sender's profile picture URL |
+| `sender.profile_picture` | `string \| null` | Sender\'s profile picture URL |
+| `sender.is_admin` | `boolean` | Sender admin status |
 | `message` | `string` | Message content |
 | `created_at` | `datetime` | ISO 8601 timestamp |
 
@@ -853,7 +874,8 @@ Send a new message in a chat room. Only participants can send messages, and only
         "id": "550e8400-e29b-41d4-a716-446655440000",
         "email": "2411102441250@umkt.ac.id",
         "name": "John Doe",
-        "profile_picture": "https://lh3.googleusercontent.com/a/example"
+        "profile_picture": "https://lh3.googleusercontent.com/a/example",
+        "is_admin": false
     ,
     "message": "Halo, saya menemukan laptop Anda.",
     "created_at": "2026-06-07T10:05:00.000000+07:00"
