@@ -3,11 +3,19 @@ from rest_framework import serializers
 from apps.users.models import User
 
 
+from django.conf import settings
+
 class UserSerializer(serializers.ModelSerializer):
+    is_admin = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ("id", "email", "name", "profile_picture")
-        read_only_fields = ("id",)
+        fields = ("id", "email", "name", "profile_picture", "is_admin")
+        read_only_fields = ("id", "is_admin")
+
+    def get_is_admin(self, obj):
+        superadmins = getattr(settings, "SUPERADMIN_EMAILS", [])
+        return obj.email in superadmins
 
 
 class UserMeSerializer(UserSerializer):
