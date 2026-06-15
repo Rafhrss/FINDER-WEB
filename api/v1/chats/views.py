@@ -4,7 +4,7 @@ import uuid
 
 from rest_framework import status
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -88,3 +88,19 @@ class MessageListCreateAPIView(APIView):
         except DjangoPermissionDenied as exc:
             raise PermissionDenied(str(exc)) from exc
         return Response(MessageSerializer(chat_message).data, status=status.HTTP_201_CREATED)
+
+
+class CleanupChatRoomsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        import os
+        auth_header = request.headers.get("Authorization")
+        cron_secret = os.environ.get("CRON_SECRET")
+        
+        if not cron_secret or auth_header != f"Bearer {cron_secret}":
+            raise PermissionDenied("Akses ditolak. Token cron tidak valid.")
+            
+        from apps.chats.services import cleanup_all_stale_chatrooms
+        result = cleanup_all_stale_chatrooms()
+        return Response(result, status=status.HTTP_200_OK)
