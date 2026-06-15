@@ -87,26 +87,37 @@
                 </div>
 
                 {# Report Banner #}
-                <a href="{% url 'web:report-detail' chatroom.report.id %}" class="flex items-center gap-3 bg-base-100 rounded-lg p-2 border border-base-300 hover:border-primary/50 hover:shadow-sm transition-all">
-                    {% if chatroom.report.image %}
-                        <img src="{{ chatroom.report.image }}" alt="{{ chatroom.report.title }}" class="w-10 h-10 object-cover rounded-md">
-                    {% else %}
-                        <div class="w-10 h-10 rounded-md bg-base-300 flex items-center justify-center text-base-content/50">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                <div class="bg-base-100 rounded-lg p-2 border border-base-300 hover:border-primary/50 hover:shadow-sm transition-all flex items-center justify-between gap-3">
+                    <a href="{% url 'web:report-detail' chatroom.report.id %}" class="flex items-center gap-3 flex-1 min-w-0">
+                        {% if chatroom.report.image %}
+                            <img src="{{ chatroom.report.image }}" alt="{{ chatroom.report.title }}" class="w-10 h-10 object-cover rounded-md">
+                        {% else %}
+                            <div class="w-10 h-10 rounded-md bg-base-300 flex items-center justify-center text-base-content/50">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            </div>
+                        {% endif %}
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-xs font-bold text-base-content truncate">{{ chatroom.report.title }}</h3>
+                            <p class="text-[10px] font-medium mt-0.5" id="report-status-badge-container">
+                                {% if chatroom.report.status == 'LOST' %}<span class="text-error" id="report-status-badge">Barang Hilang</span>
+                                {% elif chatroom.report.status == 'FOUND' %}<span class="text-success" id="report-status-badge">Barang Ditemukan</span>
+                                {% else %}<span class="text-info" id="report-status-badge">Selesai</span>{% endif %}
+                            </p>
                         </div>
-                    {% endif %}
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-xs font-bold text-base-content truncate">{{ chatroom.report.title }}</h3>
-                        <p class="text-[10px] font-medium mt-0.5">
-                            {% if chatroom.report.status == 'LOST' %}<span class="text-error">Barang Hilang</span>
-                            {% elif chatroom.report.status == 'FOUND' %}<span class="text-success">Barang Ditemukan</span>
-                            {% else %}<span class="text-info">Selesai</span>{% endif %}
-                        </p>
+                    </a>
+                    
+                    {% if chatroom.report.user_id == request.user.id and chatroom.report.status != 'CLAIMED' %}
+                    <div class="pr-2">
+                        <button type="button" onclick="selesai_modal.showModal()" class="btn btn-xs btn-primary text-xs" id="mark-claimed-btn">Selesai</button>
                     </div>
+                    {% else %}
                     <div class="pr-2 text-base-content/40">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        <a href="{% url 'web:report-detail' chatroom.report.id %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        </a>
                     </div>
-                </a>
+                    {% endif %}
+                </div>
             </header>
 
             {# ── MESSAGES ── #}
@@ -174,6 +185,25 @@
     </div>
 </div>
 
+<!-- Selesai Confirmation Modal -->
+<dialog id="selesai_modal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-xl text-slate-100">Tandai Selesai</h3><br />
+    <p class="py-4 text-slate-200 text-sm leading-relaxed">
+        Apakah Anda yakin laporan ini telah selesai/dikembalikan? Status laporan tidak dapat dikembalikan ke semula setelah ditandai selesai.
+    </p>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn btn-soft bg-slate-100 text-black hover:bg-slate-200 border-none font-semibold px-6">Batal</button>
+      </form>
+      <button type="button" onclick="executeMarkAsClaimed()" class="btn btn-primary text-black border-none font-semibold px-6" id="btn-confirm-selesai">Ya, Selesai</button>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+
 <style>
     /* Hide back button on desktop */
     @media (min-width: 768px) {
@@ -187,4 +217,52 @@
         const el = document.getElementById('chat-messages');
         if (el) el.scrollTop = el.scrollHeight;
     })();
+
+    async function executeMarkAsClaimed() {
+        const reportId = '{{ chatroom.report.id }}';
+        const btnConfirm = document.getElementById('btn-confirm-selesai');
+        
+        // Add loading state
+        if (btnConfirm) {
+            btnConfirm.innerHTML = '<span class="loading loading-spinner loading-sm"></span> Menyimpan...';
+            btnConfirm.disabled = true;
+        }
+        
+        try {
+            const response = await fetch(`/api/v1/reports/${reportId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ status: 'CLAIMED' })
+            });
+            
+            if (response.ok) {
+                // Update UI dynamically
+                const badge = document.getElementById('report-status-badge');
+                if (badge) {
+                    badge.className = 'text-info transition-all duration-500';
+                    badge.textContent = 'Selesai';
+                }
+                const btn = document.getElementById('mark-claimed-btn');
+                if (btn) btn.remove();
+                
+                // Close modal
+                document.getElementById('selesai_modal').close();
+            } else {
+                alert('Gagal mengupdate status laporan.');
+                document.getElementById('selesai_modal').close();
+            }
+        } catch (e) {
+            alert('Terjadi kesalahan jaringan.');
+            document.getElementById('selesai_modal').close();
+        } finally {
+            // Restore button state
+            if (btnConfirm) {
+                btnConfirm.innerHTML = 'Ya, Selesai';
+                btnConfirm.disabled = false;
+            }
+        }
+    }
 </script>
