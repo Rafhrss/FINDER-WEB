@@ -110,11 +110,13 @@
             </header>
 
             {# ── MESSAGES ── #}
-            <div id="chat-messages" class="flex-1 overflow-y-auto px-4 py-5 sm:px-6">
-                {# Date badge #}
-                <div class="flex justify-center mb-5">
-                    <span class="badge badge-ghost badge-sm text-[10px] uppercase tracking-widest font-bold px-3 py-2.5">Hari Ini</span>
-                </div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto px-4 py-5 sm:px-6 flex flex-col">
+                {% if chat_messages %}
+                    {# Date badge #}
+                    <div class="flex justify-center mb-5 shrink-0">
+                        <span class="badge badge-ghost badge-sm text-[10px] uppercase tracking-widest font-bold px-3 py-2.5">Hari Ini</span>
+                    </div>
+                {% endif %}
 
                 {% for item in chat_messages %}
                     {% if item.sender_id == request.user.id %}
@@ -134,7 +136,7 @@
                         </div>
                     {% endif %}
                 {% empty %}
-                    <div class="flex items-center justify-center h-full">
+                    <div class="flex-1 flex items-center justify-center">
                         <p class="text-base-content/40 text-sm">Sapa {{ other_user.name }} untuk memulai percakapan!</p>
                     </div>
                 {% endfor %}

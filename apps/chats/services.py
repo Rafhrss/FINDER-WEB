@@ -28,6 +28,26 @@ def cleanup_expired_chatrooms(*, now=None) -> int:
     return deleted_count
 
 
+def cleanup_all_stale_chatrooms(*, now=None) -> dict:
+    current_time = now or timezone.now()
+    
+    # 1. Hapus chat yang sudah expired (> 7 hari)
+    expired_cutoff = current_time - timedelta(days=EXPIRE_WINDOW_DAYS)
+    expired_count, _ = ChatRoom.objects.filter(created_at__lt=expired_cutoff).delete()
+    
+    # 2. Hapus chat yang ditinggalkan (> 1 jam, 0 pesan)
+    abandoned_cutoff = current_time - timedelta(hours=1)
+    abandoned_count, _ = ChatRoom.objects.filter(
+        created_at__lt=abandoned_cutoff,
+        messages__isnull=True
+    ).delete()
+    
+    return {
+        "expired_deleted": expired_count,
+        "abandoned_deleted": abandoned_count
+    }
+
+
 def create_chatroom(*, report, initiator) -> tuple[ChatRoom, bool]:
     cleanup_expired_chatrooms()
 

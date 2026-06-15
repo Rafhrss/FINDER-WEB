@@ -26,6 +26,7 @@ def list_chatrooms_for_user(*, user):
     return (
         ChatRoom.objects.select_related("report", "user1", "user2")
         .filter(Q(user1=user) | Q(user2=user))
+        .filter(messages__isnull=False).distinct()
         .annotate(last_message_at=Max("messages__created_at"))
         .prefetch_related(
             Prefetch(

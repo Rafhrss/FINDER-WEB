@@ -1,25 +1,26 @@
 from django.urls import path
 
-from api.v1.chats.views import (
-    ChatRoomCreateAPIView,
-    ChatRoomListAPIView,
-    MessageListCreateAPIView,
-)
+from api.v1.chats import views
 
 urlpatterns = [
     path(
         "rooms/",
-        ChatRoomListAPIView.as_view(),
+        views.ChatRoomListAPIView.as_view(),
         name="chatroom-list",
     ),
     path(
         "reports/<uuid:report_id>/rooms/",
-        ChatRoomCreateAPIView.as_view(),
+        views.ChatRoomCreateAPIView.as_view(),
         name="chatroom-create",
     ),
     path(
         "rooms/<uuid:chatroom_id>/messages/",
-        MessageListCreateAPIView.as_view(),
+        views.MessageListCreateAPIView.as_view(),
         name="message-list-create",
+    ),
+    path(
+        "cleanup/",
+        views.CleanupChatRoomsAPIView.as_view(),
+        name="chatroom-cleanup",
     ),
 ]
