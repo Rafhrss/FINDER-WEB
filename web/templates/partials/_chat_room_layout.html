@@ -188,15 +188,15 @@
 <!-- Selesai Confirmation Modal -->
 <dialog id="selesai_modal" class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-xl text-slate-100">Tandai Selesai</h3><br />
-    <p class="py-4 text-slate-200 text-sm leading-relaxed">
+    <h3 class="font-bold text-xl text-base-content">Tandai Selesai</h3>
+    <p class="py-4 text-base-content/80 text-sm leading-relaxed">
         Apakah Anda yakin laporan ini telah selesai/dikembalikan? Status laporan tidak dapat dikembalikan ke semula setelah ditandai selesai.
     </p>
     <div class="modal-action">
       <form method="dialog">
-        <button class="btn btn-soft bg-slate-100 text-black hover:bg-slate-200 border-none font-semibold px-6">Batal</button>
+        <button class="btn btn-error text-error-content border-none font-semibold px-6">Batal</button>
       </form>
-      <button type="button" onclick="executeMarkAsClaimed()" class="btn btn-primary text-black border-none font-semibold px-6" id="btn-confirm-selesai">Ya, Selesai</button>
+      <button type="button" onclick="executeMarkAsClaimed()" class="btn btn-primary text-primary-content border-none font-semibold px-6" id="btn-confirm-selesai">Ya, Selesai</button>
     </div>
   </div>
   <form method="dialog" class="modal-backdrop">

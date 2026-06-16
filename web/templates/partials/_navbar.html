@@ -46,10 +46,14 @@
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar ring ring-primary/30 ring-offset-base-100 ring-offset-2 overflow-hidden w-9 h-9">
                     {% include 'partials/_user_avatar.html' with user=request.user %}
                 </div>
-                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-200 rounded-box w-52">
+                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-200 rounded-box w-56 overflow-hidden">
+                        <li class="pointer-events-none">
+                            <span class="text-base-content font-bold truncate block w-full" title="{{ request.user.name }}">{{ request.user.name }}</span>
+                        </li>
+                        <div class="divider my-0 h-0.5 opacity-50 px-3"></div>
                         <li><a href="{% url 'web:profile' %}">Profil</a></li>
                         <li>
-                            <button type="button" class="w-full text-left text-error" onclick="logout_modal.showModal()">Logout</button>
+                            <button type="button" class="text-error" onclick="logout_modal.showModal()">Logout</button>
                         </li>
                     </ul>
                 </div>
