@@ -6,7 +6,7 @@
     <!-- Form Container -->
     <div class="card bg-base-200/40 shadow-xl border border-base-300 rounded-3xl p-6 md:p-10">
         
-        <form method="POST" enctype="multipart/form-data" action="{% url 'web:report-edit' report.id %}" class="flex flex-col gap-8">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'web:report-edit' report.id %}" class="flex flex-col gap-8" onsubmit="const btn = this.querySelector('button[type=submit]'); btn.disabled = true; btn.innerHTML = '<span class=\'loading loading-spinner loading-sm\'></span> Menyimpan...';">
             {% csrf_token %}
             
             <!-- Header Section: Title & Status -->
